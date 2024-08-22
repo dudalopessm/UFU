@@ -48,13 +48,112 @@ public class principal {
 
     public static void ex03() {
         Scanner sc = new Scanner(System.in);
-        // ....
+        int[] vet = new int[6];
+        System.out.println("<< Listando um vetor na ordem inversa >>");
+
+        for(int i = 0; i < 6; i++) {
+            System.out.print("Entre com o número " + (i+1) + ": ");
+            vet[i] = sc.nextInt();
+        }
+
+        System.out.println("Os valores lidos são: ");
+        for(int i = vet.length-1; i >= 0; i--) {
+            System.out.print(" " + vet[i]);
+        }
+        sc.close();
     }
 
+    public static void ex04() {
+        Scanner sc = new Scanner(System.in);
+        int[] vet = new int[6];
+        System.out.println("<< Listando um vetor com somente números pares >>");
+
+        int i = 0, temp;
+
+        do {
+            System.out.print("Entre com o número " + (i+ 1) + " :");
+            temp = sc.nextInt();
+            if(temp%2 == 0) {
+                vet[i] = temp;
+                i++;
+            } else {
+                System.out.println("Número inválido. Digite novamente a posição " + (i+1) + " do vetor.");
+            }
+        } while(i < 6);
+
+        System.out.println("O vetor lido foi:");
+        for(int j = 0; j < vet.length; j++) {
+            System.out.print(" " + vet[j]);
+        }
+
+        sc.close();
+    }
+
+    public static void ex05() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("<< Maior, menor e média >>");
+        int vet[] = new int[5];
+        for(int i = 0; i < vet.length; i++) {
+            System.out.print("Entre com o número " + (i+ 1) + ": ");
+            vet[i] = sc.nextInt();
+        }
+
+        int maior = vet[0], menor = vet[0];
+        float media = vet[4];
+        for(int i = 0; i < vet.length-1; i++) {
+            if(vet[i+1] > vet[i]) {
+                maior = vet[i+1];
+            }
+            if(vet[i+1] < vet[i]) {
+                menor = vet[i+1];
+            }
+            media = media + vet[i];
+        }
+        media = media/2;
+        System.out.println("Maior elemento: " + maior);
+        System.out.println("Menor elemento: " + menor);
+        System.out.println("Média dos elementos: " + media);
+        sc.close();
+    }
+
+    public static void ex06() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("<< Maior e menor >>");
+        int vet[] = new int[5];
+        for(int i = 0; i < vet.length; i++) {
+            System.out.print("Entre com o número " + (i+ 1) + ": ");
+            vet[i] = sc.nextInt();
+        }
+
+        int maior = vet[0], menor = vet[0];
+        int indexmaior = 0, indexmenor = 0;
+        for(int i = 0; i < vet.length-1; i++) {
+            if(vet[i+1] > vet[i]) {
+                maior = vet[i+1];
+                indexmaior = i+1;
+            }
+            if(vet[i+1] < vet[i]) {
+                menor = vet[i+1];
+                indexmenor = i+1;
+            }
+
+        }
+        System.out.println("O maior elemento é o " + maior + " e seu índice de posição é: " + indexmaior + " .");
+        System.out.println("O menor elemento é o " + menor + " e seu índice de posição é: " + indexmenor + " .");
+        sc.close();
+    }
+
+    public static void ex07() {
+        Scanner sc = new Scanner(System.in);
+        int vet[] = new int[5];
+        sc.close();
+    }
     public static void main(String[] args) {
-        // ex01();
-        ex02();
+        //ex01();
+        //ex02();
+        //ex03();
+        //ex04();
+        //ex05();
+        //ex06();
     }
-
-
 }
