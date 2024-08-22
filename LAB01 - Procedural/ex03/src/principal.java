@@ -146,8 +146,65 @@ public class principal {
     public static void ex07() {
         Scanner sc = new Scanner(System.in);
         int vet[] = new int[5];
+        float maiorvalor = vet[0], indicenormal;
+        System.out.println("<< Notas normalizadas >>");
+
+        //100 dividido pelo maior valor e depois multiplica todos por esse valor
+        for(int i = 0; i < vet.length; i++) {
+            System.out.print("Entre com a nota " + (i+ 1) + ": ");
+            vet[i] = sc.nextInt();
+        }
+
+        for(int i = 0; i < vet.length-1; i++) {
+            if (vet[i + 1] > vet[i]) {
+                maiorvalor = vet[i+1];
+            }
+        }
+
+        indicenormal = 100/maiorvalor;
+
+        System.out.println("Notas normalizadas: ");
+        for(int i = 0; i < vet.length; i++) {
+            System.out.println("Aluno" + (i+1) + ": " + (vet[i]*indicenormal));
+        }
         sc.close();
     }
+
+    public static void ex08() {
+        Scanner sc = new Scanner(System.in);
+        double vet[] = new double[5];
+        System.out.println("<< Média e desvio padrão amostral >>");
+        double soma = 0, soma1 = 0;
+        double media;
+        double desvioamostral;
+
+        for(int i = 0; i < vet.length; i++) {
+            System.out.print("Entre com o número " + (i+ 1) + ": ");
+            vet[i] = sc.nextDouble();
+            soma = soma + vet[i];
+        }
+
+        media = soma/5;
+
+        for(int i = 0; i < vet.length; i++) {
+            soma1 = soma1+((vet[i]-media)*(vet[i]-media));
+        }
+
+        soma1 = soma1/4;
+
+        desvioamostral = Math.sqrt(soma1);
+
+        System.out.println("A média é " + media + " e o desvio padrão amostral é " + desvioamostral + ".");
+        sc.close();
+    }
+
+    public static void ex09() {
+        System.out.println("<< Média de alunos e número máximo >>");
+        Scanner sc = new Scanner(System.in);
+
+        sc.close();
+    }
+
     public static void main(String[] args) {
         //ex01();
         //ex02();
@@ -155,5 +212,8 @@ public class principal {
         //ex04();
         //ex05();
         //ex06();
+        //ex07();
+        //ex08();
+        ex09();
     }
 }
