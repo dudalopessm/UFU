@@ -27,7 +27,10 @@ public class principal {
 
         System.out.println("Os valores lidos são:");
         System.out.printf("%d %d %d %d %d %d ", val1, val2, val3, val4, val5, val6);
+<<<<<<< HEAD
         sc.close();
+=======
+>>>>>>> 410c8d194ee74c713f6bc5eb9b4c6d54659a1bed
     }
 
     public static void ex02() {
@@ -451,6 +454,7 @@ public class principal {
 
     public static void main(String[] args) {
         //ex01();
+<<<<<<< HEAD
         //ex02();
         //ex03();
         //ex04();
@@ -466,5 +470,9 @@ public class principal {
         //ex14();
         //ex15();
         //ex16();
+=======
+        ex02();
+        //ex03();
+>>>>>>> 410c8d194ee74c713f6bc5eb9b4c6d54659a1bed
     }
 }
