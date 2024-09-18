@@ -31,6 +31,7 @@ public class Eleicao {
         return this.numeroCandidatos;
     }
     public void mostrarEleicao() {
+        System.out.println("~~~~~~~~~ Informações da eleição de " + getNomeMunicipio() + " ~~~~~~~~~");
         System.out.println("Município: " + getNomeMunicipio() + " - " + getEstadoMunicipio());
         System.out.println("Código do Município: " + getCodigoMunicipio());
         System.out.println("Número de Votantes: " + getNumeroVotantes());

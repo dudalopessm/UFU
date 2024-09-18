@@ -124,8 +124,6 @@ public class Candidato {
 
     public void mostrar() {
         System.out.println("**********************");
-        System.out.println("Município: " + getMunicipio());
-        System.out.println("Código do município: " + getCodigoMun());
         System.out.println("Nome: " + getNome());
         System.out.println("Data de nascimento: " + getDataNascimento());
         System.out.println("Gênero: "+ getGenero());
