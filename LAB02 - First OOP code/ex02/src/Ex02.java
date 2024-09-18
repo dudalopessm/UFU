@@ -1,8 +1,41 @@
 public class Ex02 {
     public static void main(String[]args) {
-        Candidato c1 = new Candidato("Alexandre Holanda Sabino", "13/05/1973", "Masculino", 132000.00, false, 12, "Prefeito", 2305233, "Horizonte - CE");
-        Candidato c2 = new Candidato("Manoel Gomes de Faria Neto", "18/08/1959", "Masculino", 1919410.00, true, 40, "Prefeito", 2305233, "Horizonte - CE");
-        Candidato c3 = new Candidato("Rhenan Cavalcante Assunção", "12/02/1989", "Masculino", 278000.00, false, 25, "Prefeito", 2305233, "Horizonte - CE");
+        Candidato c1 = new Candidato();
+        //sets para c1
+        c1.setNome("Alexandre Holanda Sabino");
+        c1.setDataNascimento("13/05/1973");
+        c1.setGenero("Masculino");
+        c1.setBens(132000.00);
+        c1.setReeleicao(false);
+        c1.setNumeroPartido(12);
+        c1.setCargo("Prefeito");
+        c1.setCodigoMun(2305233);
+        c1.setMunicipio("Horizonte - CE");
+
+        Candidato c2 = new Candidato();
+        //sets para c2
+        c2.setNome("Manoel Gomes de Faria Neto");
+        c2.setDataNascimento("18/08/1959");
+        c2.setGenero("Masculino");
+        c2.setBens(1919410.00);
+        c2.setReeleicao(true);
+        c2.setNumeroPartido(40);
+        c2.setCargo("Prefeito");
+        c2.setCodigoMun(2305233);
+        c2.setMunicipio("Horizonte - CE");
+
+        Candidato c3 = new Candidato();
+        //sets para c3
+        c3.setNome("Rhenan Cavalcante Assunção");
+        c3.setDataNascimento("12/02/1989");
+        c3.setGenero("Masculino");
+        c3.setBens(278000.00);
+        c3.setReeleicao(false);
+        c3.setNumeroPartido(25);
+        c3.setCargo("Prefeito");
+        c3.setCodigoMun(2305233);
+        c3.setMunicipio("Horizonte - CE");
+
         System.out.println("~~~~~~~~~~~~ Sistema de informações de candidatos a eleição de 2024 ~~~~~~~~~~~~");
         c1.mostrar();
         c2.mostrar();
@@ -13,10 +46,10 @@ public class Ex02 {
         controle = c1.alteraNome("Alexandre de Morais");
         System.out.println("Novo nome: " + c1.getNome());
         System.out.println("\nAlterando a data de nascimento do candidato " + c2.getNome());
-        controle = c1.alteraData("01/01/2023");
+        controle = c2.alteraData("01/01/2023");
         System.out.println("Nova data de nascimento: " + c2.getDataNascimento());
         System.out.println("\nAlterando o gênero do candidato " + c3.getNome());
-        controle = c1.alteraGenero("Feminino");
+        controle = c3.alteraGenero("Feminino");
         System.out.println("Novo gênero: " + c3.getGenero());
         System.out.println("\nAlterando bens do candidato " + c1.getNome());
         controle = c1.alteraBens(2);

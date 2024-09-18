@@ -16,7 +16,7 @@ public class Candidato {
         return this.nomeCompleto;
     }
     public int alteraNome(String nome) {
-        if(nome != getNome()) {
+        if(!nome.equals(getNome())) {
             setNome(nome);
             return 0;
         } else {
@@ -145,20 +145,8 @@ public class Candidato {
         }
     }
 
-    public Candidato(String nome, String nasc, String genero, double bem, boolean reelege, int numpart, String cargo, int codmun, String municipio) {
-        setNome(nome);
-        setDataNascimento(nasc);
-        setGenero(genero);
-        setBens(bem);
-        setReeleicao(reelege);
-        setNumeroPartido(numpart);
-        setCargo(cargo);
-        setCodigoMun(codmun);
-        setMunicipio(municipio);
-    }
-
     public void mostrar() {
-        System.out.println("---------------------------------------------------------");
+        System.out.println("**********************");
         System.out.println("Município: " + getMunicipio());
         System.out.println("Código do município: " + getCodigoMun());
         System.out.println("Nome: " + getNome());
