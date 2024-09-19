@@ -9,6 +9,7 @@ public class Candidato {
     private int codigoMunicipio;
     private String municipio;
 
+    //construtores
     public Candidato(String nome, String nasc, String gen, double bem, boolean reelege, int numpart, String cargo, int codmun, String mun) {
         this.nomeCompleto = nome;
         this.dataNascimento = nasc;
@@ -20,11 +21,38 @@ public class Candidato {
         this.codigoMunicipio = codmun;
         this.municipio = mun;
     }
-
     public Candidato() {
         //construtor padrão para auxiliar a busca do candidato rico, quero um objeto que inicie com tudo NULL ou 0
     }
 
+    //setters e getters
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
+    }
+    public void setDataNascimento(String dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+    public void setBens(double bens) {
+        this.bens = bens;
+    }
+    public void setReeleicao(boolean reeleicao) {
+        this.reeleicao = reeleicao;
+    }
+    public void setNumeroPartido(int numeroPartido) {
+        this.numeroPartido = numeroPartido;
+    }
+    public void setCargoPretendido(String cargoPretendido) {
+        this.cargoPretendido = cargoPretendido;
+    }
+    public void setCodigoMunicipio(int codigoMunicipio) {
+        this.codigoMunicipio = codigoMunicipio;
+    }
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
     public String getNome() {
         return this.nomeCompleto;
     }
@@ -36,7 +64,6 @@ public class Candidato {
             return 1;
         }
     }
-
     public String getDataNascimento() {
         return this.dataNascimento;
     }
@@ -48,7 +75,6 @@ public class Candidato {
             return 1;
         }
     }
-
     public String getGenero() {
         return this.genero;
     }
@@ -60,7 +86,6 @@ public class Candidato {
             return 1;
         }
     }
-
     public double getBens() {
         return this.bens;
     }
@@ -72,7 +97,6 @@ public class Candidato {
             return 1;
         }
     }
-
     public boolean getReeleicao() {
         return this.reeleicao;
     }
@@ -84,7 +108,6 @@ public class Candidato {
             return 1;
         }
     }
-
     public int getNumeroPartido() {
         return this.numeroPartido;
     }
@@ -96,7 +119,6 @@ public class Candidato {
             return 1;
         }
     }
-
     public String getCargo() {
         return this.cargoPretendido;
     }
@@ -108,11 +130,9 @@ public class Candidato {
             return 1;
         }
     }
-
     public int getCodigoMun() {
         return this.codigoMunicipio;
     }
-
     public String getMunicipio() {
         return this.municipio;
     }
@@ -126,6 +146,7 @@ public class Candidato {
         }
     }
 
+    //mostra informações
     public void mostrar() {
         System.out.println("**********************");
         System.out.println("Nome: " + getNome());
@@ -135,5 +156,18 @@ public class Candidato {
         System.out.println("Candidato a reeleição?: " + getReeleicao());
         System.out.println("Número do partido: " + getNumeroPartido());
         System.out.println("Cargo pretendido: " + getCargo());
+    }
+
+    //destroi objeto para reutilização no vetor
+    public void destroiCandidato() {
+        setBens(0);
+        setCargoPretendido(null);
+        setCodigoMunicipio(0);
+        setDataNascimento(null);
+        setGenero(null);
+        setMunicipio(null);
+        setNomeCompleto(null);
+        setNumeroPartido(0);
+        setReeleicao(false);
     }
 }

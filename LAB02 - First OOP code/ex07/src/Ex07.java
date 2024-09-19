@@ -1,3 +1,4 @@
+import java.util.Scanner;
 public class Ex07 {
     public static void insertionSort(Produto[] lista) {
         int n = lista.length;
@@ -11,7 +12,6 @@ public class Ex07 {
             lista[i+1] = chave;
         }
     }
-
     public static void main(String[]args) {
         Produto[] listaProdutosTotal = new Produto[14];
         //definindo produtos
@@ -57,5 +57,74 @@ public class Ex07 {
         for(Produto produto : listaProdutosTotal) {
             produto.imprime_produto();
         }
+        /*
+        Scanner sc = new Scanner(System.in);
+        int N;
+        System.out.println("Digite a quantidade de produtos: ");
+        N = sc.nextInt();
+        Produto[] listaDin = new Produto[N];
+        String nomeP;
+        int quantP, opcao, controle = 0;
+        float precoP;
+        for(int i = 0; i < listaDin.length; i++) {
+            String inputOpcao;
+            boolean opcaoValida = false;
+            opcao = -1;  // inicializa com um valor padrão inválido
+            //solicita a opção até que uma entrada válida seja fornecida
+            do {
+                System.out.println("Digite 1 se deseja cadastrar um produto com nome, preço e quantidade e 0 se deseja cadastrar só nome e quantidade: ");
+                inputOpcao = sc.nextLine().trim();  // remove espaços em branco
+                if (!inputOpcao.isEmpty()) {
+                    try {
+                        opcao = Integer.parseInt(inputOpcao);  // converte para número
+                        if(opcao == 1 || opcao == 0) {
+                            opcaoValida = true;  // marca a opção como válida
+                        } else {
+                            System.out.println("Opção inválida! Tente novamente.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Entrada inválida! Por favor, digite um número.");
+                    }
+                } else {
+                    System.out.println("Entrada vazia! Por favor, digite uma opção.");
+                }
+            } while (!opcaoValida);  // repete enquanto a opção não for válida
+
+            // se a opção for válida, continua com o cadastro
+            if(opcao == 1) {
+                System.out.println("Digite o nome do produto " + (i+1) + ": ");
+                nomeP = sc.nextLine();
+                System.out.println("Digite a quantidade do produto " + nomeP + ": ");
+                quantP = Integer.parseInt(sc.nextLine());
+
+                String inputPreco;
+                boolean precoValido = false;
+                precoP = 0.0f;  // inicializa precoP com um valor padrão
+
+                do {
+                    System.out.println("Digite o preço do produto " + nomeP + ": ");
+                    inputPreco = sc.nextLine().trim();
+                    if (!inputPreco.isEmpty()) {
+                        try {
+                            precoP = Float.parseFloat(inputPreco);  // converte a string para float
+                            precoValido = true;  // marca o preço como válido
+                        } catch (NumberFormatException e) {
+                            System.out.println("Preço inválido! Tente novamente.");
+                        }
+                    }
+                } while (!precoValido);  // repete enquanto o preço não for válido
+                listaDin[i] = new Produto(nomeP, precoP, quantP);
+            } else if(opcao == 0) {
+                System.out.println("Digite o nome do produto " + (i+1) + ": ");
+                nomeP = sc.nextLine();
+                System.out.println("Digite a quantidade do produto " + nomeP + ": ");
+                quantP = Integer.parseInt(sc.nextLine());
+                listaDin[i] = new Produto(nomeP, quantP);
+            }
+        }
+        for(Produto unidade : listaDin) {
+            unidade.imprime_produto();
+        }
+        sc.close();*/
     }
 }
