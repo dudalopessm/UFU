@@ -3,13 +3,13 @@ public class Produto {
     private float precoProduto;
     private int quantidadeEstoque;
 
-    //quando já tenho a quantidade
+    //quando já tenho o preço
     public Produto(String nome, float preco, int quant) {
         this.nomeProduto = nome;
         this.precoProduto = preco;
         this.quantidadeEstoque = quant;
     }
-    //quando não tenho a quantidade
+    //quando não tenho o preço
     public Produto(String nome, int quant) {
         this.nomeProduto = nome;
         this.precoProduto = 0;
