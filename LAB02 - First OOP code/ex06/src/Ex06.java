@@ -69,6 +69,6 @@ public class Ex06 {
         for (Eleicao unidade : listaEleicao) {
             unidade.mostrarEleicao();
         }
-        sc.close();
+        sc.close();git add
     }
 }
