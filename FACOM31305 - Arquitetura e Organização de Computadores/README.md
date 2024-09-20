@@ -1,1 +1,2 @@
-Repositório feito para armazenamento de códigos escritos em Assembly, usando a arquitetura MIPS. 
+<h3>Arquitetura e Organização de Computadores</h3>
+Repository created to store code written in Assembly using the MIPS architecture.
