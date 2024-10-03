@@ -67,14 +67,14 @@ candidato a vice-prefeito. Para o vereador, o número de três dígitos (use str
     //mostra dados
     @Override
     public String toString() {
-        return "Candidato " +
-                "'" + nomePrefeito + '\'' +
-                ", nascido em " + dataNascimentoPrefeito +
-                ", com genero identificado como " + generoPrefeito + '\'' +
-                ", de bens " + bensPrefeito + "reais" +
-                ", com candidatura a reeleicao " + reeleicaoPrefeito +
-                ", representado pelo partido de número " + numeroPartidoPrefeito +
-                ", de vice de nome " + nomeVice + '\'' +
-                ", representado pelo partido " + partidoVice + '\'';
+        return "\n************ Candidato  ************" +
+                "\nNome: " + nomePrefeito +
+                "\nNascimento: " + dataNascimentoPrefeito +
+                "\nGênero: " + generoPrefeito +
+                "\nBens declarados: " + bensPrefeito + " reais" +
+                "\nCandidato a reeleicao: " + reeleicaoPrefeito +
+                "\nNúmero do partido: " + numeroPartidoPrefeito +
+                "\nNome do(a) vice: " + nomeVice +
+                "\nPartido do(a) vice: " + partidoVice;
     }
 }
