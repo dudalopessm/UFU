@@ -10,6 +10,8 @@ candidato a vice-prefeito. Para o vereador, o número de três dígitos (use str
 - Faça um programa principal que cria um candidato a prefeito e um a vereador, e mostre os dados criados.
  */
     public static void main(String[]args) {
-
+        System.out.println("------------------------------------ Vereadores e prefeitos ------------------------------------");
+        CandidatoVereador vereador1 = new CandidatoVereador("Guilherme Fonseca Marques", "19/07/1971", "Masculino", 520070.00, false, "30888", "Caiçaras");
+        System.out.println(vereador1.toString());
     }
 }

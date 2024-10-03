@@ -1,5 +1,7 @@
+import java.util.Date;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 
 public class CandidatoPrefeito {
     /*
@@ -13,5 +15,66 @@ candidato a vice-prefeito. Para o vereador, o número de três dígitos (use str
 - Faça um programa principal que cria um candidato a prefeito e um a vereador, e mostre os dados criados.
      */
     private String nomePrefeito;
-    private LocalDate;
+    private LocalDate dataNascimentoPrefeito;
+    private String generoPrefeito;
+    private double bensPrefeito;
+    private boolean reeleicaoPrefeito;
+    private int numeroPartidoPrefeito;
+    private String nomeVice;
+    private String partidoVice;
+
+    //construtor
+    public CandidatoPrefeito(String nome, String nasc, String gen, double bem, boolean ree, int numP, String nomev, String partv) {
+        this.nomePrefeito = nome;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataUsuario = LocalDate.parse(nasc, formatter);
+        this.dataNascimentoPrefeito = dataUsuario;
+        this.generoPrefeito = gen;
+        this.bensPrefeito = bem;
+        this.reeleicaoPrefeito = ree;
+        this.numeroPartidoPrefeito = numP;
+        this.nomeVice = nomev;
+        this.partidoVice = partv;
+
+    }
+
+    //getters
+    public String getNomePrefeito() {
+        return nomePrefeito;
+    }
+    public LocalDate getDataNascimentoPrefeito() {
+        return dataNascimentoPrefeito;
+    }
+    public String getGeneroPrefeito() {
+        return generoPrefeito;
+    }
+    public double getBensPrefeito() {
+        return bensPrefeito;
+    }
+    public boolean isReeleicaoPrefeito() {
+        return reeleicaoPrefeito;
+    }
+    public int getNumeroPartidoPrefeito() {
+        return numeroPartidoPrefeito;
+    }
+    public String getNomeVice() {
+        return nomeVice;
+    }
+    public String getPartidoVice() {
+        return partidoVice;
+    }
+
+    //mostra dados
+    @Override
+    public String toString() {
+        return "Candidato " +
+                "'" + nomePrefeito + '\'' +
+                ", nascido em " + dataNascimentoPrefeito +
+                ", com genero identificado como " + generoPrefeito + '\'' +
+                ", de bens " + bensPrefeito + "reais" +
+                ", com candidatura a reeleicao " + reeleicaoPrefeito +
+                ", representado pelo partido de número " + numeroPartidoPrefeito +
+                ", de vice de nome " + nomeVice + '\'' +
+                ", representado pelo partido " + partidoVice + '\'';
+    }
 }
