@@ -44,12 +44,4 @@ public class Jogador {
     public String toString() {
         return "Nome jogador: " + getNomeJogador() + " | Idade jogador: " + getIdadeJogador() + " | Peso jogador: " + getPesoJogador() + " | Altura jogador: " + getAlturaJogador();
     }
-
-    //remoção
-    void removeJogador() {
-        setAlturaJogador(0);
-        setIdadeJogador(0);
-        setPesoJogador(0);
-        setNomeJogador(null);
-    }
 }

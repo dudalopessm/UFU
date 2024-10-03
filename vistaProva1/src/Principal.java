@@ -3,7 +3,40 @@ public class Principal {
     public static void main(String[]args) {
         int N;
         Scanner sc = new Scanner(System.in);
-        System.out.println("--------------------------- Vista prova 1 ---------------------------");
+        System.out.println("--------------------------- Teste ---------------------------");
+        Time[] listaTimesTeste = new Time[2];
+        Jogador[] auxteste1 = new Jogador[2];
+        auxteste1[0] = new Jogador("Pedrinho", 34, 2.03, 102.45);
+        auxteste1[1] = new Jogador("Claudio", 21, 1.76, 80.5);
+        Jogador[] auxteste2 = new Jogador[2];
+        auxteste2[0] = new Jogador("Alessandro", 18, 1.80, 90.5);
+        auxteste2[1] = new Jogador("Walter", 25, 1.87, 99.99);
+        Jogador reserva1 = new Jogador("José Gustavo", 19, 1.77, 80.6);
+        listaTimesTeste[0] = new Time("Cruzeiro", auxteste1);
+        listaTimesTeste[1] = new Time("Atlético Mineiro", auxteste2, reserva1);
+        for(Time unidade : listaTimesTeste) {
+            if(unidade.getReserva() != null) {
+                System.out.println(unidade.toString());
+            } else {
+                unidade.mostraSemReserva();
+            }
+        }
+        double mediaIdTeste;
+        for(Time unidade : listaTimesTeste) {
+            mediaIdTeste = unidade.calculoIdadeMedia();
+            System.out.println("A média de idade do time " + unidade.getNomeTime() + " é de " + mediaIdTeste + " anos.");
+        }
+        System.out.println("####################### Destruição de times #######################");
+        for(Time unidade : listaTimesTeste) {
+            unidade.destroiTime();
+            if(unidade.getReserva() != null) {
+                System.out.println(unidade.toString());
+            } else {
+                unidade.mostraSemReserva();
+            }
+        }
+        System.out.println("\n\n\n");
+         System.out.println("--------------------------- Vista prova 1 ---------------------------");
         System.out.println("Informe a quantidade de times: ");
         N = sc.nextInt();
         sc.nextLine();

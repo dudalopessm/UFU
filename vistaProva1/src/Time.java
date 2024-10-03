@@ -7,12 +7,16 @@ public class Time {
     //construtores
     public Time(String nome, Jogador[] listatitulares, Jogador r) {
         this.nomeTime = nome;
-        this.titulares = listatitulares;
-        this.reserva = r;
+        for(int i = 0; i < titulares.length; i++) {
+            titulares[i] = new Jogador(listatitulares[i].getNomeJogador(), listatitulares[i].getIdadeJogador(), listatitulares[i].getAlturaJogador(), listatitulares[i].getPesoJogador());
+        }
+        this.reserva = new Jogador(r.getNomeJogador(), r.getIdadeJogador(), r.getAlturaJogador(), r.getPesoJogador());
     }
     public Time(String nome, Jogador[] listatitulares) {
         this.nomeTime = nome;
-        this.titulares = listatitulares;
+        for(int i = 0; i < titulares.length; i++) {
+            titulares[i] = new Jogador(listatitulares[i].getNomeJogador(), listatitulares[i].getIdadeJogador(), listatitulares[i].getAlturaJogador(), listatitulares[i].getPesoJogador());
+        }
         this.reserva = null;
     }
     public Time() {
@@ -69,10 +73,10 @@ public class Time {
     public void destroiTime() {
         setNomeTime(null);
         if(getReserva() != null) {
-            reserva.removeJogador();
+            reserva = null;
         }
         for(int i = 0; i < titulares.length; i++) {
-            titulares[i].removeJogador();
+            titulares[i] = null;
         }
     }
 }
