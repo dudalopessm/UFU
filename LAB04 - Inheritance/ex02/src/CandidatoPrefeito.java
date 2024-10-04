@@ -33,8 +33,14 @@ Isso é feito usando a palavra reservada super
     //mostra dados
     @Override
     public String toString() {
-        return super.toString() +
-                "\nNome do vice: "+ nomeVice +
-                "\nPartido do vice: " + partidoVice;
+        return "************ Candidato  ************" +
+                "\nNome: " + nomeCandidato +
+                "\nNascimento: " + dataNascimento +
+                "\nGênero: " + genero +
+                "\nBens declarados: " + bens + " reais" +
+                "\nCandidato a reeleicao: " + reeleicao +
+                "\nNúmero do partido: " + numeroPartido +
+                "\nNome do(a) vice: " + nomeVice +
+                "\nPartido do(a) vice: " + partidoVice;
     }
 }
