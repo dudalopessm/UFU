@@ -1,0 +1,27 @@
+Sao Paulo
+Campinas
+95.0
+Campinas
+Ribeirao Preto
+240.0
+Campinas
+Sorocaba
+130.0
+Sorocaba
+Piracicaba
+120.0
+Piracicaba
+Bauru
+170.0
+Ribeirao Preto
+Sao Jose do Rio Preto
+150.0
+Sao Jose do Rio Preto
+Uberlandia
+310.0
+Bauru
+Maringa
+340.0
+Maringa
+Curitiba
+400.0

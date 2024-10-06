@@ -1,0 +1,75 @@
+Rio de Janeiro
+Belo Horizonte
+580.0
+Sao Paulo
+Campinas
+90.0
+Santos
+Guaruja
+50.0
+Sao Jose dos Campos
+Mogi das Cruzes
+60.0
+Sao Bernardo do Campo
+Santo Andre
+20.0
+Diadema
+Osasco
+15.0
+Barueri
+Cotia
+35.0
+Embu das Artes
+Itapecerica da Serra
+55.0
+Carapicuiba
+Itapevi
+75.0
+Jandira
+Taboao da Serra
+95.0
+Juquitiba
+Vargem Grande Paulista
+115.0
+Francisco Morato
+Caieiras
+135.0
+Mairipora
+Franco da Rocha
+155.0
+Atibaia
+Braganca Paulista
+175.0
+Jundiai
+Itu
+195.0
+Sorocaba
+Votorantim
+215.0
+Piracicaba
+Limeira
+235.0
+Ribeirao Preto
+Uberlandia
+255.0
+Uberaba
+Juiz de Fora
+275.0
+Governador Valadares
+Ipatinga
+295.0
+Belo Horizonte
+Contagem
+315.0
+Betim
+Nova Lima
+335.0
+Sete Lagoas
+Santa Luzia
+359.0
+Itabira
+Divinopolis
+315.0
+Santa Luzia
+Varginha
+385.0
