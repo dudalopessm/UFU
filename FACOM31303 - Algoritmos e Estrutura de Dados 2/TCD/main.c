@@ -7,6 +7,7 @@
 //#include <conio.h>
 #include "Candidatos.h"
 #include "VetorCandidatos.h"
+#include "ABBCandidatos.h"
 
 /*
 A. O usuário escolha um arquivo de texto para ser carregado nas estruturas de dados,
