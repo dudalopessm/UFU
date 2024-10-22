@@ -2,15 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include <windows.h>
-// #include <conio.h>
-
-/*
-Referências:
-- Função CenterText: - https://stackoverflow.com/questions/15312482/how-to-center-text-in-c-console
-                     - https://learn.microsoft.com/en-us/windows/console/setconsolecursorposition?redirectedfrom=MSDN
-                     - https://cboard.cprogramming.com/c-programming/163828-how-center-text-using-printf.html                     
-*/
 
 typedef struct candidato{
     char estadoCandidato[3];
@@ -28,7 +19,7 @@ typedef struct candidato{
 Candidato *criaCandidato(char *estado, char *cidade, char *num, char *cargo, char *nomeCandidato, char *nomeUrna, char *sigla, char *genero, char *grau, char *cor) {
     Candidato *end = malloc(sizeof(Candidato));
     if (end == NULL) {
-        return NULL;  // Tratamento de erro se malloc falhar
+        return NULL;  
     }
     strncpy(end->estadoCandidato, estado, sizeof(end->estadoCandidato) - 1);
     end->estadoCandidato[sizeof(end->estadoCandidato) - 1] = '\0';
@@ -52,6 +43,13 @@ Candidato *criaCandidato(char *estado, char *cidade, char *num, char *cargo, cha
     end->corCandidato[sizeof(end->corCandidato) - 1] = '\0';
     return end;
 }
+
+char *extrairToken(char *linha, char *token, const char *delimitador)
+{
+    strcpy(token, strtok(linha, delimitador));
+    return token;
+}
+
 char *getEstadoCandidato(Candidato *cand){
     return cand->estadoCandidato;
 }
@@ -61,6 +59,18 @@ char *getCidadeCandidato(Candidato *cand){
 char *getNumeroCandidato(Candidato *cand){
     return cand->numeroCandidato;
 }
+char *getCargo(Candidato *cand){
+    return cand->cargoCandidato;
+}
+char *getNomeCompleto(Candidato *cand){
+    return cand->nomeCandidato;
+}
+char *getNomeUrna(Candidato *cand){
+    return cand->nomeNaUrna;
+}
+char *getGrau(Candidato *cand){
+    return cand->grauCandidato;
+}
 char *getGenero(Candidato *cand){
     return cand->generoCandidato;
 }
@@ -69,6 +79,18 @@ char *getPartido(Candidato *cand){
 }
 char *getCor(Candidato *cand){
     return cand->corCandidato;
+}
+
+int comparaCandidatos(Candidato *a, Candidato *b) {
+    int cmp = strcmp(getEstadoCandidato(a), getEstadoCandidato(b));
+    if (cmp != 0) {
+        return cmp;
+    }
+    cmp = strcmp(getCidadeCandidato(a), getCidadeCandidato(b));
+    if (cmp != 0) {
+        return cmp;
+    }
+    return strcmp(getNumeroCandidato(a), getNumeroCandidato(b));
 }
 
 void destroiCandidato(Candidato *it) {
@@ -95,19 +117,3 @@ void imprimeCandidato(Candidato *candidato) {
     printf("Numero:            %40s\n", candidato->numeroCandidato);
     printf("\n\n");
 }
-/*
-void CenterText(const char *text) {
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-    GetConsoleScreenBufferInfo(console, &consoleInfo);
-    int textLength = strlen(text);
-    int consoleWidth = consoleInfo.srWindow.Right - consoleInfo.srWindow.Left;
-    int posX = (consoleWidth - textLength) / 2;
-    int posY = consoleInfo.dwCursorPosition.Y;
-    COORD newPos;
-    newPos.X = posX;
-    newPos.Y = posY;
-    SetConsoleCursorPosition(console, newPos);
-    printf("%s", text);
-}
-*/

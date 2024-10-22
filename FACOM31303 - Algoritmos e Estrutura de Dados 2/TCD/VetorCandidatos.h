@@ -8,12 +8,12 @@ typedef struct vetorCandidatos VetorCandidatos;
 //inserção ordenada
 VetorCandidatos *criarVetorCandidato();
 VetorCandidatos *lerArquivoVetor(char *enderecoArquivo);
-char *extrairToken(char *linha, char *token, const char *delimitador);
+
 
 int inserirCandidatos(VetorCandidatos *vet, Candidato *novoCandidato);
 
 int ordenacao(VetorCandidatos *vet);
-int comparaCandidatos(Candidato *a, Candidato *b);
+
 
 int ordenacaoCor(VetorCandidatos *vet);
 int ordenacaoGenero(VetorCandidatos *vet);

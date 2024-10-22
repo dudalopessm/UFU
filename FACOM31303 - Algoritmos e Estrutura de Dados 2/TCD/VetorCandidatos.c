@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "VetorCandidatos.h"
-// #include <locale.h>
 
 typedef struct vetorCandidatos {
     int len; 
@@ -21,15 +20,9 @@ VetorCandidatos *criarVetorCandidato(){
     return vet;
 }
 
-char *extrairToken(char *linha, char *token, const char *delimitador)
-{
-    strcpy(token, strtok(linha, delimitador));
-    return token;
-}
-
-
 VetorCandidatos *lerArquivoVetor(char *enderecoArquivo)
 {
+    
     // Define o locale para português brasileiro (UTF-8)
     // setlocale(LC_ALL, "pt_BR.UTF-8");
     
@@ -97,17 +90,7 @@ int inserirCandidatos(VetorCandidatos *vet, Candidato *novoCandidato){
 //--------------------------------------------------------------------- ORDENAÇÃO ------------------------------------------------------------
 //ordenação deve ser feita ao mesmo tempo -> no estado deve estar ordenado por cidade e na cidade deve estar ordenada por numero
 
-int comparaCandidatos(Candidato *a, Candidato *b) {
-    int cmp = strcmp(getEstadoCandidato(a), getEstadoCandidato(b));
-    if (cmp != 0) {
-        return cmp;
-    }
-    cmp = strcmp(getCidadeCandidato(a), getCidadeCandidato(b));
-    if (cmp != 0) {
-        return cmp;
-    }
-    return strcmp(getNumeroCandidato(a), getNumeroCandidato(b));
-}
+
 
 int ordenacao(VetorCandidatos *vet){
     int j, i, h = 1;
@@ -573,194 +556,9 @@ VetorCandidatos *buscaBinariaPartido(VetorCandidatos *vet, char *chave)
 
     return resultado;
 }
-
-/*
-int buscaBinariaAuxEstadoCor(Candidato **vet, int inf, int sup, char *chave) {
-    int meio = (inf+sup)/2;
-    if(inf > sup)
-        return -1;
-    char *coraux = getCor(vet[meio]);
-    if(strcmp(coraux, chave) == 0) {            
-        return meio;
-    }
-    else if(strcmp(coraux, chave) < 0) 
-        return buscaBinariaAuxEstadoCor(vet, meio+1, sup, chave);
-    else 
-        return buscaBinariaAuxEstadoCor(vet, inf, meio-1, chave);
-}
-
-VetorCandidatos* buscaBinariaEstadoCor(VetorCandidatos *vetPrincipal, char *chave, char *estado) {
-    
-    VetorCandidatos *vet = buscaBinariaEstado(vetPrincipal,estado);
-
-    if(vet == NULL)
-        return NULL;
-
-    if(vet->quant_elem == 0)
-        return NULL;
-
-    VetorCandidatos *resultado = criarVetorCandidato();
-
-    ordenacaoCor(resultado);
-    int posicao = buscaBinariaAuxEstadoCor(vet->vetCandidatos, 0, vet->quant_elem-1, chave);
-    if (posicao == -1)
-    {
-        return resultado; // vazio se n encontrou
-    }
-
-    int i = posicao;
-    while (i >= 0 && strcmp(getCor(vet->vetCandidatos[i]), chave) == 0)
-    {
-        i--;
-    }
-
-    int j = posicao;
-    while (j < vet->quant_elem && strcmp(getCor(vet->vetCandidatos[j]), chave) == 0)
-    {
-        j++;
-    }
-
-    for (int k = i + 1; k < j; k++)
-    {
-        inserirCandidatos(resultado, vet->vetCandidatos[k]);
-    }
-
-    return resultado;
-}
-Candidato* buscaBinariaAuxEstadoCidadeCor(Candidato **vet, int inf, int sup, char *chave) {
-    int meio = (inf+sup)/2;
-    if(inf > sup)
-        return NULL;
-    char *coraux = getCor(vet[meio]);
-    if(strcmp(coraux, chave) == 0)
-        return vet[meio];
-    else if(strcmp(coraux, chave) < 0) 
-        return buscaBinariaAuxEstadoCidadeCor(vet, meio+1, sup, chave);
-    else 
-        return buscaBinariaAuxEstadoCidadeCor(vet, inf, meio-1, chave);
-}
-Candidato* buscaBinariaEstadoCidadeCor(VetorCandidatos *vetPrincipal, char *chave, char *cidade, char *estado) { 
-
-    VetorCandidatos *vet = buscaBinariaCidade(vetPrincipal, cidade,estado);//aqui a gente passa o vetor de cidades já achado anteriormente
-    if(vet == NULL)
-        return NULL;
-
-    if(vet->quant_elem == 0)
-        return NULL;
-
-    
-
-    return buscaBinariaAuxEstadoCidadeCor(vet->vetCandidatos, 0, vet->quant_elem-1, chave);
-}
-//Gênero
-int buscaBinariaAuxEstadoGenero(Candidato **vet, int inf, int sup, char *chave) {
-    int meio = (inf+sup)/2;
-    if(inf > sup)
-        return -1;
-    char *generoaux = getGenero(vet[meio]);
-    if(strcmp(generoaux, chave) == 0) {
-        return meio;
-    }
-    else if(strcmp(generoaux, chave) < 0) 
-        return buscaBinariaAuxEstadoGenero(vet, meio+1, sup, chave);
-    else 
-        return buscaBinariaAuxEstadoGenero(vet, inf, meio-1, chave);
-}
-VetorCandidatos* buscaBinariaEstadoGenero(VetorCandidatos *vetPrincipal, char *chave, char *estado) {
-    VetorCandidatos *vet = buscaBinariaEstado(vetPrincipal, estado);
-    if(vet == NULL)
-        return NULL;
-    if(vet->quant_elem == 0)
-        return NULL;
-    VetorCandidatos *resultado = criarVetorCandidato();
-    int posicao = buscaBinariaAuxEstadoGenero(vet->vetCandidatos, 0, vet->quant_elem-1, chave);
-    int i = posicao;
-    while (strcmp(getGenero(vet->vetCandidatos[i]), chave)==0)
-    {
-        i--;
-    }
-    i++;
-    while (strcmp(getGenero(vet->vetCandidatos[i]), chave)==0){
-        inserirCandidatos(resultado, vet->vetCandidatos[i]);
-    }
-    return resultado;
-}
-Candidato* buscaBinariaAuxEstadoCidadeGenero(Candidato **vet, int inf, int sup, char *chave) {
-    int meio = (inf+sup)/2;
-    if(inf > sup)
-        return NULL;
-    char *genaux = getGenero(vet[meio]);
-    if(strcmp(genaux, chave) == 0)
-        return vet[meio];
-    else if(strcmp(genaux, chave) < 0) 
-        return buscaBinariaAuxEstadoCidadeGenero(vet, meio+1, sup, chave);
-    else 
-        return buscaBinariaAuxEstadoCidadeGenero(vet, inf, meio-1, chave);
-}
-Candidato* buscaBinariaEstadoCidadeGenero(VetorCandidatos *vetPrincipal, char *chave, char *cidade,char *estado) { 
-    VetorCandidatos *vet = buscaBinariaCidade(vetPrincipal, cidade,estado); //aqui a gente passa o vetor de cidades já achado anteriormente
-    if(vet == NULL)
-        return NULL;
-    if(vet->quant_elem == 0)
-        return NULL;
-    return buscaBinariaAuxEstadoCidadeGenero(vet->vetCandidatos, 0, vet->quant_elem-1, chave);
-}
-//Sigla partido 
-int buscaBinariaAuxEstadoPartido(Candidato **vet, int inf, int sup, char *chave) {
-    int meio = (inf+sup)/2;
-    if(inf > sup)
-        return -1;
-    char *partaux = getPartido(vet[meio]);
-    if(strcmp(partaux, chave) == 0) {            
-        return meio;
-    }
-    else if(strcmp(partaux, chave) < 0) 
-        return buscaBinariaAuxEstadoPartido(vet, meio+1, sup, chave);
-    else 
-        return buscaBinariaAuxEstadoPartido(vet, inf, meio-1, chave);
-}
-VetorCandidatos* buscaBinariaEstadoPartido(VetorCandidatos *vetPrincipal, char *chave, char *estado) {
-    VetorCandidatos *vet = buscaBinariaEstado(vetPrincipal,estado);
-    if(vet == NULL)
-        return NULL;
-    if(vet->quant_elem == 0)
-        return NULL;
-    VetorCandidatos *resultado = criarVetorCandidato();
-    int posicao = buscaBinariaAuxEstadoPartido(vet->vetCandidatos, 0, vet->quant_elem-1, chave);
-    int i = posicao;
-    while (strcmp(getPartido(vet->vetCandidatos[i]), chave)==0)
-    {
-        i--;
-    }
-    i++;
-    while (strcmp(getPartido(vet->vetCandidatos[i]), chave)==0){
-        inserirCandidatos(resultado, vet->vetCandidatos[i]);
-    }
-    return resultado;
-}
-Candidato* buscaBinariaAuxEstadoCidadePartido(Candidato **vet, int inf, int sup, char *chave) {
-    int meio = (inf+sup)/2;
-    if(inf > sup)
-        return NULL;
-    char *coraux = getPartido(vet[meio]);
-    if(strcmp(coraux, chave) == 0)
-        return vet[meio];
-    else if(strcmp(coraux, chave) < 0) 
-        return buscaBinariaAuxEstadoCidadePartido(vet, meio+1, sup, chave);
-    else 
-        return buscaBinariaAuxEstadoCidadePartido(vet, inf, meio-1, chave);
-}
-Candidato* buscaBinariaEstadoCidadePartido(VetorCandidatos *vetPrincipal, char *chave, char *cidade,char *estado) { 
-    VetorCandidatos *vet = buscaBinariaCidade(vetPrincipal, cidade,estado);//aqui a gente passa o vetor de cidades já achado anteriormente
-    if(vet == NULL)
-        return NULL;
-    if(vet->quant_elem == 0)
-        return NULL;
-    return buscaBinariaAuxEstadoCidadePartido(vet->vetCandidatos, 0, vet->quant_elem-1, chave);
-}
-*/
 //--------------------------------------------------------------------- IMPRESSAO ------------------------------------------------------------
 void imprimeVetorInteiro(VetorCandidatos *vet){
+    if(vet == NULL) return;
     for(int i=0; i<vet->quant_elem;i++){
         imprimeCandidato(vet->vetCandidatos[i]);
     }
