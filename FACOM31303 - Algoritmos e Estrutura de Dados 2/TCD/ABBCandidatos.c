@@ -60,7 +60,7 @@ int altura_ArvBin(ArvBin* raiz){
         return alt_esq + 1;
     else 
         return alt_dir + 1;
-        
+
 }
 
 int totalNO_ArvBin(ArvBin *raiz) {
@@ -200,7 +200,7 @@ void buscaCidadeABBAux(ArvBin *raiz, char *cidade, ArvBin *copia){
     int cmp = strcmp(stripWhitespace(getCidadeCandidato((*raiz)->info)), cidade);
 
     if(cmp == 0){
-        
+
         insere_ArvBin(copia, criaCandidato(getEstadoCandidato((*raiz)->info), getCidadeCandidato((*raiz)->info), getNumeroCandidato((*raiz)->info), getCargo((*raiz)->info), getNomeCompleto((*raiz)->info), getNomeUrna((*raiz)->info), getPartido((*raiz)->info), getGenero((*raiz)->info), getGrau((*raiz)->info), getCor((*raiz)->info)));
         buscaCidadeABBAux(&((*raiz)->dir), cidade, copia);
         buscaCidadeABBAux(&((*raiz)->esq), cidade, copia);
@@ -300,24 +300,11 @@ ArvBin *buscaCorRacaABB(ArvBin *raiz, char *corRaca){
     return copia;
 }
 
-/*
-
-ArvBin *busca_ArvBinEstado(ArvBin *raiz, char *sigla){ //AQUIIIIIII
-    if(*raiz == NULL || raiz == NULL) return NULL;
-    if(strcmp(getEstadoCandidato((*raiz)->info), sigla) == 0)
-        return raiz;
-    else if (strcmp(getEstadoCandidato((*raiz)->info), sigla) < 0) 
-        return busca_ArvBinEstado(&((*raiz)->dir), sigla);
-    else 
-        return busca_ArvBinEstado(&((*raiz)->esq), sigla);
-    return NULL;
-}
-
-*/
-
 void preOrdem_ArvBin(ArvBin *raiz) {
-    if(raiz == NULL||*raiz == NULL)
+    if(raiz == NULL||*raiz == NULL) {
+        printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
         return;
+    }
     if(*raiz != NULL) {
         imprimeCandidato((*raiz)->info);
         preOrdem_ArvBin(&((*raiz)->esq));
@@ -325,8 +312,10 @@ void preOrdem_ArvBin(ArvBin *raiz) {
     }
 }
 void emOrdem_ArvBin(ArvBin *raiz) {
-    if (raiz == NULL)
+    if (raiz == NULL) {
+        printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
         return;
+    }
     if(*raiz != NULL) {
         emOrdem_ArvBin(&((*raiz)->esq));
         imprimeCandidato((*raiz)->info); 
@@ -334,8 +323,10 @@ void emOrdem_ArvBin(ArvBin *raiz) {
     }
 }
 void posOrdem_ArvBin(ArvBin *raiz) {
-    if(raiz == NULL)
+    if(raiz == NULL) {
+        printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
         return;
+    }
     if(*raiz != NULL) {
         posOrdem_ArvBin(&((*raiz)->esq));
         posOrdem_ArvBin(&((*raiz)->dir));
@@ -358,7 +349,7 @@ Candidato *menor_ArvBin(ArvBin *raiz){
 }
 
 
-ArvBin *lerArquivoAbb(char *enderecoArquivo) { //AQUIIIIIII
+ArvBin *lerArquivoAbb(char *enderecoArquivo) { 
     FILE *arq = fopen(enderecoArquivo, "r");
     if (arq == NULL)
     {
@@ -377,7 +368,7 @@ ArvBin *lerArquivoAbb(char *enderecoArquivo) { //AQUIIIIIII
     char genero[50];
     char grauDeInstrucao[50];
     char cor_raca[50];
-    int ct = 0;
+    //int ct = 0;
     char linha[500];
     while (fgets(linha, sizeof(linha), arq)){
         extrairToken(linha, estado, ";");
@@ -392,7 +383,7 @@ ArvBin *lerArquivoAbb(char *enderecoArquivo) { //AQUIIIIIII
         extrairToken(NULL, cor_raca, "\n");
         insere_ArvBin(arv, criaCandidato(estado, cidade, numero, cargo, nomeCompleto, nomeUrna, siglaPartido, genero, grauDeInstrucao, cor_raca));
         //printf("\n%d", ct);
-        ct++;
+        //ct++;
     }
     fclose(arq);
     return arv;
@@ -404,14 +395,11 @@ char *stripWhitespace(char *str)
 {
     char *end;
 
-    // Trim leading space
     while(isspace((unsigned char)*str)) str++;
 
-    // Trim trailing space
     end = str + strlen(str) - 1;
     while(end > str && isspace((unsigned char)*end)) end--;
 
-    // Null terminate after the last non-space character
     *(end + 1) = '\0';
 
     return str;

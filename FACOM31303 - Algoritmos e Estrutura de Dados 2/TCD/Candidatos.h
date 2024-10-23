@@ -19,6 +19,5 @@ void destroiCandidato(Candidato *it);
 int comparaCandidatos(Candidato *a, Candidato *b);
 
 void imprimeCandidato(Candidato *it);
-void CenterText(const char *text);
 
 #endif //CANDIDATOS_H

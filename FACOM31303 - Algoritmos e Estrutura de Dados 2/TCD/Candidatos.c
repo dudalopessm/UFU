@@ -2,6 +2,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+
+char *stripWhitespaceCand(char *str)
+{
+    char *end;
+
+    while (isspace((unsigned char)*str))
+        str++;
+
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end))
+        end--;
+
+    *(end + 1) = '\0';
+
+    return str;
+}
 
 typedef struct candidato{
     char estadoCandidato[3];
@@ -41,6 +58,19 @@ Candidato *criaCandidato(char *estado, char *cidade, char *num, char *cargo, cha
     end->grauCandidato[sizeof(end->grauCandidato) - 1] = '\0';
     strncpy(end->corCandidato, cor, sizeof(end->corCandidato) - 1);
     end->corCandidato[sizeof(end->corCandidato) - 1] = '\0';
+
+    stripWhitespaceCand(end->estadoCandidato);
+    stripWhitespaceCand(end->cidadeCandidato);
+    stripWhitespaceCand(end->numeroCandidato);
+    stripWhitespaceCand(end->cargoCandidato);
+    stripWhitespaceCand(end->nomeCandidato);
+    stripWhitespaceCand(end->nomeNaUrna);
+    stripWhitespaceCand(end->estadoCandidato);
+    stripWhitespaceCand(end->siglaPartido);
+    stripWhitespaceCand(end->generoCandidato);
+    stripWhitespaceCand(end->grauCandidato);
+    stripWhitespaceCand(end->corCandidato);
+
     return end;
 }
 
@@ -115,5 +145,6 @@ void imprimeCandidato(Candidato *candidato) {
     printf("Grau de Instrucao: %40s\n", candidato->grauCandidato);
     printf("Cor/Raca:          %40s\n", candidato->corCandidato);
     printf("Numero:            %40s\n", candidato->numeroCandidato);
+    printf("___________________________________________________________________");
     printf("\n\n");
 }

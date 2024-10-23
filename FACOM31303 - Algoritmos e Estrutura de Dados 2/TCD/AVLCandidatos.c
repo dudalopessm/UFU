@@ -201,7 +201,7 @@ int insere_ArvAVL(ArvAVL *raiz, Candidato *cand)
     }
     else
     {
-        // Valor diplicado
+        // Valor duplicado
         return 0;
     }
 
@@ -311,8 +311,10 @@ int remove_ArvAVL(ArvAVL *raiz, Candidato *cand)
 
 void preOrdem_ArvAVL(ArvAVL *raiz)
 {
-    if (raiz == NULL || *raiz == NULL)
+    if (raiz == NULL || *raiz == NULL) {
+        printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
         return;
+    }
     if (*raiz != NULL)
     {
         imprimeCandidato((*raiz)->info);
@@ -322,8 +324,10 @@ void preOrdem_ArvAVL(ArvAVL *raiz)
 }
 void emOrdem_ArvAVL(ArvAVL *raiz)
 {
-    if (raiz == NULL)
+    if (raiz == NULL) {
+        printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
         return;
+    }
     if (*raiz != NULL)
     {
         emOrdem_ArvAVL(&((*raiz)->esq));
@@ -333,8 +337,10 @@ void emOrdem_ArvAVL(ArvAVL *raiz)
 }
 void posOrdem_ArvAVL(ArvAVL *raiz)
 {
-    if (raiz == NULL)
+    if (raiz == NULL) {
+        printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
         return;
+    }
     if (*raiz != NULL)
     {
         posOrdem_ArvAVL(&((*raiz)->esq));
@@ -435,14 +441,9 @@ void buscaNumeroAVLAux(ArvAVL *raiz, char *numero, ArvAVL *copia)
     if (cmp == 0)
     {
         insere_ArvAVL(copia, criaCandidato(getEstadoCandidato((*raiz)->info), getCidadeCandidato((*raiz)->info), getNumeroCandidato((*raiz)->info), getCargo((*raiz)->info), getNomeCompleto((*raiz)->info), getNomeUrna((*raiz)->info), getPartido((*raiz)->info), getGenero((*raiz)->info), getGrau((*raiz)->info), getCor((*raiz)->info)));
-        return;
     }
-    else if (cmp < 0)
-    {
-        return buscaNumeroAVLAux(&((*raiz)->dir), numero, copia);
-    }
-    else
-        return buscaNumeroAVLAux(&((*raiz)->esq), numero, copia);
+    buscaNumeroAVLAux(&((*raiz)->dir), numero, copia);
+    buscaNumeroAVLAux(&((*raiz)->esq), numero, copia);
 }
 
 ArvAVL *buscaNumeroAVL(ArvAVL *raiz, char *numero)
@@ -572,16 +573,13 @@ char *stripWhitespaceAVL(char *str)
 {
     char *end;
 
-    // Trim leading space
     while (isspace((unsigned char)*str))
         str++;
 
-    // Trim trailing space
     end = str + strlen(str) - 1;
     while (end > str && isspace((unsigned char)*end))
         end--;
 
-    // Null terminate after the last non-space character
     *(end + 1) = '\0';
 
     return str;

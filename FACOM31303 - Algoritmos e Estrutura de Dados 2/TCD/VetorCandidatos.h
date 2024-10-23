@@ -7,6 +7,7 @@ typedef struct vetorCandidatos VetorCandidatos;
 
 //inserção ordenada
 VetorCandidatos *criarVetorCandidato();
+void libera_vetor(VetorCandidatos *vet);
 VetorCandidatos *lerArquivoVetor(char *enderecoArquivo);
 
 
