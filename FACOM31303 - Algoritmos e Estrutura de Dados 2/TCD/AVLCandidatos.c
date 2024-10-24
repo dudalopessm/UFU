@@ -1,3 +1,20 @@
+/*
+
+  TRABALHO DE BUSCA DE DADOS DE CANDIDATOS DA ELEICAO DE 2024
+  
+    GRUPO: Eduarda Lopes (12311BCC033), Lucas Matos (12311BCC024) e Matheus Vinicius (12311BCC018)
+
+    PROFESSOR: Maria Camila Nardoni
+
+    DISCIPLINA: FACOM31303 - ALGORITMOS E ESTRUTURA DE DADOS 2 
+
+    SEMESTRE: 2024.1 
+
+    CREDITOS: - IMPLEMENTACAO DE ARVORE BINARIA UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula10-Arvores.pdf -> creditos ao professor Andre Backes
+              - IMPLEMENTACAO DE ARVORE AVL UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula11ArvoreAVL.pdf-> creditos ao professor Andre Backes
+              - FUNCAO AUXILIAR STRIPWHITESPACE: https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way -> stackoverflow
+
+*/
 #include "Candidatos.h"
 #include "AVLCandidatos.h"
 #include <stdio.h>
@@ -5,24 +22,50 @@
 #include <string.h>
 #include <ctype.h>
 
+
+// ------------------------------------- FUNCOES AUXILIARES --------------------------------------//
+
 /*
-Lucas Matos Rodrigues 12311BCC024
-Eduarda Lopes Santos Moura 12311BCC033
-Matheus Vinicius Maximo Santos 12311BCC018
+    FUNCAO stripWhitespaceAVL:
 
-IMPLEMENTAÇÃO DE ÁRVORE AVL UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula11-ArvoreAVL.pdf-> créditos ao professor André Backes
-FUNÇÃO AUXILIAR STRIPWHITESPACE: https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way -> stackoverflow
+        Mesmo funcionamento da funcao stripWhitespaceCand em Candidatos.C
+
 */
+char *stripWhitespaceAVL(char *str)
+{
+    char *end;
 
+    while (isspace((unsigned char)*str))
+        str++;
 
-char *stripWhitespaceAVL(char *str);
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end))
+        end--;
 
+    *(end + 1) = '\0';
 
+    return str;
+}
+
+/*
+    FUNCAO maior:
+
+        retorna o maior numero entre a e b
+
+*/
 int maior(int a, int b)
 {
     return (a > b) ? a : b;
 }
 
+// ------------------------------------- ESTRUTURA ARVORE AVL --------------------------------------//
+
+/*
+    Estrutura  Arvore AVL:
+
+        A Arvore AVL é definida como um no raiz e nos filhos a esquerda e a direita, com pequena alteracao da informacao contida como sendo um *Candidato e o a altura do NO em relação aos seus filhos.
+
+*/
 struct NO
 {
     Candidato *info;
@@ -31,6 +74,44 @@ struct NO
     struct NO *dir;
 };
 
+// ------------------------------------- FUNCOES RELACIONADAS AS ARVORES --------------------------------------//
+
+/*
+    FUNCAO maior_ArvAVL:
+
+        Retorna maior candidato pelo sistema de comparaCandidato()
+
+*/
+Candidato *maior_ArvAVL(ArvAVL *raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+    if ((*raiz)->dir == NULL)
+        return (*raiz)->info;
+    return maior_ArvAVL(&((*raiz)->dir));
+}
+
+/*
+    FUNCAO menor_ArvAVL:
+
+        Retorna menor candidato pelo sistema de comparaCandidato()
+
+*/
+Candidato *menor_ArvAVL(ArvAVL *raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+    if ((*raiz)->esq == NULL)
+        return (*raiz)->info;
+    return menor_ArvAVL(&((*raiz)->esq));
+}
+
+/*
+    FUNCAO alt_NO:
+
+        Funcao que retorna a altura do NO em relacao aos seus filhos
+
+*/
 int alt_NO(struct NO *no)
 {
     if (no == NULL)
@@ -39,6 +120,12 @@ int alt_NO(struct NO *no)
         return no->alt;
 }
 
+/*
+    FUNCAO altura_ArvAVL:
+
+        Funcao que retorna a altura da arvore AVL inteira
+
+*/
 int altura_ArvAVL(ArvAVL *raiz)
 {
     if (raiz == NULL)
@@ -53,11 +140,23 @@ int altura_ArvAVL(ArvAVL *raiz)
         return alt_dir + 1;
 }
 
+/*
+    FUNCAO fatorBalanceamento_NO:
+
+        Funcao que retorna fator de balanceamento de um dado No (2, 1 ou 0)
+
+*/
 int fatorBalanceamento_NO(struct NO *no)
 {
     return labs(alt_NO(no->esq) - alt_NO(no->dir));
 }
 
+/*
+    FUNCAO verFatorAux:
+
+        Funcao de debug que verifica a existencia de fatores de balancemanto em toda a arvore
+
+*/
 void verFatorAux(ArvAVL *raiz, int n, char *nome)
 {
     if (*raiz == NULL || raiz == NULL)
@@ -70,11 +169,23 @@ void verFatorAux(ArvAVL *raiz, int n, char *nome)
     verFatorAux(&((*raiz)->esq), n + 1, "Esq");
 }
 
+/*
+    FUNCAO verFator:
+
+        Funcao de debug que verifica a existencia de fatores de balancemanto em toda a arvore
+
+*/
 void verFator(ArvAVL *raiz)
 {
     verFatorAux(raiz, 0, "raiz");
 }
 
+/*
+    FUNCAO RotacaoLL:
+
+        Funcao que realiza uma rotacao simples a direita de um determinado no da arvore
+
+*/
 void RotacaoLL(ArvAVL *raiz)
 {
     struct NO *no;
@@ -88,6 +199,12 @@ void RotacaoLL(ArvAVL *raiz)
     *raiz = no;
 }
 
+/*
+    FUNCAO RotacaoRR:
+
+        Funcao que realiza uma rotacao simples a esquerda de um determinado no da arvore
+
+*/
 void RotacaoRR(ArvAVL *raiz)
 {
     struct NO *no;
@@ -101,17 +218,58 @@ void RotacaoRR(ArvAVL *raiz)
     *raiz = no;
 }
 
+/*
+    FUNCAO RotacaoRL:
+
+        Funcao que realiza uma rotacao simples direita e depois realiza uma rotacao simples a esquerda de um determinado no
+
+*/
 void RotacaoRL(ArvAVL *raiz)
 {
     RotacaoLL(&(*raiz)->dir);
     RotacaoRR(raiz);
 }
 
+/*
+    FUNCAO RotacaoLR:
+
+        Funcao que realiza uma rotacao simples esquerda e depois realiza uma rotacao simples a direita de um determinado no
+
+*/
 void RotacaoLR(ArvAVL *raiz)
 {
     RotacaoRR(&(*raiz)->esq);
     RotacaoLL(raiz);
 }
+
+/*
+    FUNCAO procuraMenor:
+
+        Funcao que procura o menor No dentro de uma arvore e retorna ele
+
+*/
+struct NO *procuraMenor(struct NO *raiz)
+{
+    struct NO *n1 = raiz;
+    struct NO *n2 = raiz->esq;
+
+    while (n2 != NULL)
+    {
+        n1 = n2;
+        n2 = n2->esq;
+    }
+
+    return n1;
+}
+
+// ------------------------------------- CRIACAO E DESTRUICAO DE ARVORES AVL --------------------------------------//
+
+/*
+    Funcao  cria_ArvAVL:
+
+        A funcao aloca memoria para a estrutura de ArvAVL e retona o ponteiro resultade para raiz
+
+*/
 
 ArvAVL *cria_ArvAVL()
 {
@@ -121,6 +279,12 @@ ArvAVL *cria_ArvAVL()
     return raiz;
 }
 
+/*
+    Funcao  libera_NO_ArvAVL:
+
+        A funcao faz a liberaçpao dos dados de um dado No, contendo o candidato, de maneira recursiva ate que o no em questao seja igual a NULL
+
+*/
 void libera_NO_ArvAVL(struct NO *no)
 {
     if (no == NULL)
@@ -132,6 +296,12 @@ void libera_NO_ArvAVL(struct NO *no)
     no = NULL;
 }
 
+/*
+    Funcao  libera_ArvAVL:
+
+        A funcao faz a liberaçpao dos dados de uma dada arvore usando a funcao auxiliar libera_NO_ArvAVL, para a liberacao das ramificacoes da arvore e por fim liberando a raiz
+
+*/
 void libera_ArvAVL(ArvAVL *raiz)
 {
     if (raiz == NULL)
@@ -141,6 +311,19 @@ void libera_ArvAVL(ArvAVL *raiz)
     *raiz = NULL;
 }
 
+// ------------------------------------- INSERCAO E REMOCAO DE DADOS --------------------------------------//
+
+/*
+    Funcao de Insercao:
+
+        - A funcao de insercao em AVL é uma funcao recursiva que realiza a comparacao entre o candidadato a ser inserido e o valor da raiz.
+        - Caso essa comparacao seja maior que zero, fazemos a chamada da insercao novamente com a raiz sendo o subarvore a direita e verificamos se ela foi 1.
+        - Caso seja, verificamos se é necessario fazer o balanceamento da arvore com rotacoes RR e RL
+        - Caso essa comparacao seja menor que zero, fazemos a chamada da insercao novamente com a raiz sendo o subarvore a esquerda e verificamos se ela foi 1.
+        - Caso seja, verificamos se é necessario fazer o balanceamento da arvore com rotacoes LL e LR
+        - Se verificarmos se alguma raiz foi nula, inserirmos o candidato na posicao correspondente e retornamos 1
+        - Nao esquecemos que ao fim precisamos sempre atualizar a altura da arvore ao fim de cada laco
+*/
 int insere_ArvAVL(ArvAVL *raiz, Candidato *cand)
 {
     if (raiz == NULL)
@@ -210,20 +393,17 @@ int insere_ArvAVL(ArvAVL *raiz, Candidato *cand)
     return res;
 }
 
-struct NO *procuraMenor(struct NO *raiz)
-{
-    struct NO *n1 = raiz;
-    struct NO *n2 = raiz->esq;
+/*
+    Funcao de Remocao:
 
-    while (n2 != NULL)
-    {
-        n1 = n2;
-        n2 = n2->esq;
-    }
-
-    return n1;
-}
-
+        - A funcao de remocao em AVL é uma funcao recursiva que realiza a comparacao entre o candidadato a ser removido e o valor da raiz.
+        - Caso essa comparacao seja maior que zero, fazemos a chamada da remocao novamente com a raiz sendo o subarvore a direita e verificamos se ela foi 1.
+        - Caso seja, verificamos se é necessario fazer o balanceamento da arvore com rotacoes RR e RL
+        - Caso essa comparacao seja menor que zero, fazemos a chamada da remocao novamente com a raiz sendo o subarvore a esquerda e verificamos se ela foi 1.
+        - Caso seja, verificamos se é necessario fazer o balanceamento da arvore com rotacoes LL e LR
+        - Caso essa comparacao seja igual a zero, removemos o candidato na posicao correspondente e retornamos 1
+        - Nao esquecemos que ao fim precisamos sempre atualizar a altura da arvore ao fim de cada laco
+*/
 int remove_ArvAVL(ArvAVL *raiz, Candidato *cand)
 {
     if (raiz == NULL || *raiz == NULL)
@@ -309,6 +489,17 @@ int remove_ArvAVL(ArvAVL *raiz, Candidato *cand)
     return res;
 }
 
+// ------------------------------------- FUNCOES DE IMPRESAO EM ARVORES AVL --------------------------------------//
+
+/*
+    Funcao preOrdem_ArvAVL:
+
+        A funcao faz a impressao de forma recursiva seguindo a ordem:
+            - Imprime a raiz
+            - Imprime o filho a esquerda
+            - Imprime o filho a direita
+        
+*/
 void preOrdem_ArvAVL(ArvAVL *raiz)
 {
     if (raiz == NULL || *raiz == NULL) {
@@ -322,6 +513,16 @@ void preOrdem_ArvAVL(ArvAVL *raiz)
         preOrdem_ArvAVL(&((*raiz)->dir));
     }
 }
+
+/*
+    Funcao emOrdem_ArvAVL:
+    
+        A funcao faz a impressao de forma recursiva seguindo a ordem:
+            - Imprime o filho a esquerda
+            - Imprime a raiz
+            - Imprime o filho a direita
+        
+*/
 void emOrdem_ArvAVL(ArvAVL *raiz)
 {
     if (raiz == NULL) {
@@ -335,6 +536,16 @@ void emOrdem_ArvAVL(ArvAVL *raiz)
         emOrdem_ArvAVL(&((*raiz)->dir));
     }
 }
+
+/*
+    Funcao posOrdem_ArvAVL:
+    
+        A funcao faz a impressao de forma recursiva seguindo a ordem:
+            - Imprime o filho a esquerda
+            - Imprime o filho a direita
+            - Imprime a raiz
+        
+*/
 void posOrdem_ArvAVL(ArvAVL *raiz)
 {
     if (raiz == NULL) {
@@ -349,24 +560,24 @@ void posOrdem_ArvAVL(ArvAVL *raiz)
     }
 }
 
-Candidato *maior_ArvAVL(ArvAVL *raiz)
-{
-    if (raiz == NULL)
-        return NULL;
-    if ((*raiz)->dir == NULL)
-        return (*raiz)->info;
-    return maior_ArvAVL(&((*raiz)->dir));
-}
 
-Candidato *menor_ArvAVL(ArvAVL *raiz)
-{
-    if (raiz == NULL)
-        return NULL;
-    if ((*raiz)->esq == NULL)
-        return (*raiz)->info;
-    return menor_ArvAVL(&((*raiz)->esq));
-}
+// ------------------------------------- FUNCOES DE BUSCA --------------------------------------//
+/*
+    Funcoes de Busca:
 
+        - Como ideia central da busca em uma arvore binaria, eh o retorno de uma nova arvore, que vamos chamar de copia, com os candidado que queremos buscar, 
+        nisso ao verificamos qual o tipo dado queremos buscar, se for estado a busca eh dada de uma forma, senao for ela eh dada de maneira diferente. 
+        - Busca estado: Como sabemos que os dados por estado, cidade e numero pela maneira que as insercoes estao sendo feitas, podemos comparar estado da raiz com o estado 
+        buscado, caso a comparacao feita pelo strcmp() seja menor do que zero buscamos na raiz a direita, caso seja maior do que zero buscamos na raiz a esquerda, por fim se for 
+        igual a zero fazemos a insercao em copia e buscamos em ambas as subarvores.
+        - Busca gera: Como sabemos que os dados por estado, cidade e numero pela maneira que as insercoes estao sendo feitas, os dados podem estar tanto na arvore a esquerda quanto 
+        na arvore a direita entao apenas comparamos dado da raiz com o dado buscado, caso a comparacao feita pelo strcmp() seja igual a zero fazemos a insercao em copia e 
+        depois buscamos em ambas as subarvores.
+        - Esse processo eh repetido ate que todas as ocorrencias do dado seja encontrado na arvore.
+        
+*/
+
+// Busca estado
 void buscaEstadoAVLAux(ArvAVL *raiz, char *estado, ArvAVL *copia)
 {
     if (raiz == NULL || *raiz == NULL)
@@ -399,6 +610,7 @@ ArvAVL *buscaEstadoAVL(ArvAVL *raiz, char *estado)
     return copia;
 }
 
+// Busca Cidade
 void buscaCidadeAVLAux(ArvAVL *raiz, char *cidade, ArvAVL *copia)
 {
     if (raiz == NULL || *(raiz) == NULL)
@@ -410,16 +622,10 @@ void buscaCidadeAVLAux(ArvAVL *raiz, char *cidade, ArvAVL *copia)
     {
 
         insere_ArvAVL(copia, criaCandidato(getEstadoCandidato((*raiz)->info), getCidadeCandidato((*raiz)->info), getNumeroCandidato((*raiz)->info), getCargo((*raiz)->info), getNomeCompleto((*raiz)->info), getNomeUrna((*raiz)->info), getPartido((*raiz)->info), getGenero((*raiz)->info), getGrau((*raiz)->info), getCor((*raiz)->info)));
-        buscaCidadeAVLAux(&((*raiz)->dir), cidade, copia);
-        buscaCidadeAVLAux(&((*raiz)->esq), cidade, copia);
-        return;
+        
     }
-    else if (cmp < 0)
-    {
-        return buscaCidadeAVLAux(&((*raiz)->dir), cidade, copia);
-    }
-    else
-        return buscaCidadeAVLAux(&((*raiz)->esq), cidade, copia);
+    buscaCidadeAVLAux(&((*raiz)->dir), cidade, copia);
+    buscaCidadeAVLAux(&((*raiz)->esq), cidade, copia);
 }
 
 ArvAVL *buscaCidadeAVL(ArvAVL *raiz, char *cidade)
@@ -431,6 +637,7 @@ ArvAVL *buscaCidadeAVL(ArvAVL *raiz, char *cidade)
     return copia;
 }
 
+// Busca Numero
 void buscaNumeroAVLAux(ArvAVL *raiz, char *numero, ArvAVL *copia)
 {
     if (raiz == NULL || *(raiz) == NULL)
@@ -455,6 +662,7 @@ ArvAVL *buscaNumeroAVL(ArvAVL *raiz, char *numero)
     return copia;
 }
 
+// Busca genero
 void buscaGeneroAVLAux(ArvAVL *raiz, char *genero, ArvAVL *copia)
 {
     if (raiz == NULL || *(raiz) == NULL)
@@ -480,6 +688,7 @@ ArvAVL *buscaGeneroAVL(ArvAVL *raiz, char *genero)
     return copia;
 }
 
+// Busca Partido
 void buscaPartidoAVLAux(ArvAVL *raiz, char *partido, ArvAVL *copia)
 {
     if (raiz == NULL || *(raiz) == NULL)
@@ -503,6 +712,7 @@ ArvAVL *buscaPartidoAVL(ArvAVL *raiz, char *partido)
     return copia;
 }
 
+// Busca Cor/Raca
 void buscaCorRacaAVLAux(ArvAVL *raiz, char *corRaca, ArvAVL *copia)
 {
     if (raiz == NULL || *(raiz) == NULL)
@@ -526,6 +736,17 @@ ArvAVL *buscaCorRacaAVL(ArvAVL *raiz, char *corRaca)
 
     return copia;
 }
+
+// ------------------------------------- FUNCAO DE LEITURA DE ARQUIVO --------------------------------------//
+/*
+    FUNCAO lerArquivoAVL:
+    
+        - Recebe uma string que sinaliza qual arquivo deve ser lido
+        - Extrai dados de candidatos pela funcao extrairToken
+        - Insere os candidatos de forma sequencial por meio da funcao insere_ArvVL que recebe a arvore AVL e que recebera o candidato e a criacao do candidato 
+        - O candidato a ser inserido eh criado na propria chamada da funcao que insere o candidato no vetor
+        
+*/
 
 ArvAVL *lerArquivoAVL(char *enderecoArquivo)
 {
@@ -567,20 +788,4 @@ ArvAVL *lerArquivoAVL(char *enderecoArquivo)
     }
     fclose(arq);
     return arv;
-}
-
-char *stripWhitespaceAVL(char *str)
-{
-    char *end;
-
-    while (isspace((unsigned char)*str))
-        str++;
-
-    end = str + strlen(str) - 1;
-    while (end > str && isspace((unsigned char)*end))
-        end--;
-
-    *(end + 1) = '\0';
-
-    return str;
 }

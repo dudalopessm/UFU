@@ -1,3 +1,20 @@
+/*
+
+  TRABALHO DE BUSCA DE DADOS DE CANDIDATOS DA ELEICAO DE 2024
+  
+    GRUPO: Eduarda Lopes (12311BCC033), Lucas Matos (12311BCC024) e Matheus Vinicius (12311BCC018)
+
+    PROFESSOR: Maria Camila Nardoni
+
+    DISCIPLINA: FACOM31303 - ALGORITMOS E ESTRUTURA DE DADOS 2 
+
+    SEMESTRE: 2024.1 
+
+    CREDITOS: - IMPLEMENTACAO DE ARVORE BINARIA UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula10-Arvores.pdf -> creditos ao professor Andre Backes
+              - IMPLEMENTACAO DE ARVORE AVL UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula11ArvoreAVL.pdf-> creditos ao professor Andre Backes
+              - FUNCAO AUXILIAR STRIPWHITESPACE: https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way -> stackoverflow
+
+*/
 #include "ABBCandidatos.h"
 #include "Candidatos.h"
 #include <stdio.h>
@@ -5,17 +22,36 @@
 #include <string.h>
 #include <ctype.h>
 
+// ------------------------------------- FUNCOES AUXILIARES --------------------------------------//
+
 /*
-Lucas Matos Rodrigues 12311BCC024
-Eduarda Lopes Santos Moura 12311BCC033
-Matheus Vinicius Maximo Santos 12311BCC018
+    FUNCAO stripWhitespace:
 
-IMPLEMENTAÇÃO DE ÁRVORE BINÁRIA UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula10-Arvores.pdf -> créditos ao professor André Backes
-FUNÇÃO AUXILIAR STRIPWHITESPACE: https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way -> stackoverflow
+        Mesmo funcionamento da funcao stripWhitespaceCand em Candidatos.C
+
 */
+char *stripWhitespace(char *str)
+{
+    char *end;
 
-char *stripWhitespace(char *str);
+    while(isspace((unsigned char)*str)) str++;
 
+    end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+
+    *(end + 1) = '\0';
+
+    return str;
+}
+
+// ------------------------------------- ESTRUTURA ARVORE BINARIA --------------------------------------//
+
+/*
+    Estrutura  Arvore Binaria:
+
+        A Arvore binaria é definida como um no raiz e nos filhos a esquerda e a direita, com pequena alteracao da informacao contida como sendo um *Candidato
+
+*/
 
 typedef struct NO* ArvBin;
 struct NO{
@@ -24,6 +60,14 @@ struct NO{
     struct NO *dir;
 }NO;
 
+// ------------------------------------- CRIACAO E DESTRUICAO DE ARVORES BINARIAS --------------------------------------//
+
+/*
+    Funcao  cria_ArvBin:
+
+        A funcao aloca memoria para a estrutura de ArvBin e retona o ponteiro resultade para raiz
+
+*/
 ArvBin* cria_ArvBin() {
     ArvBin* raiz = (ArvBin*)malloc(sizeof(ArvBin));
     if(raiz != NULL)
@@ -31,6 +75,12 @@ ArvBin* cria_ArvBin() {
     return raiz;
 }
 
+/*
+    Funcao  libera_NO:
+
+        A funcao faz a liberaçpao dos dados de um dado No, contendo o candidato, de maneira recursiva ate que o no em questao seja igual a NULL
+
+*/
 void libera_NO(struct NO* no) {
     if(no == NULL)
         return;
@@ -41,6 +91,12 @@ void libera_NO(struct NO* no) {
     no = NULL;
 }
 
+/*
+    Funcao  libera_ArvBin:
+
+        A funcao faz a liberaçpao dos dados de uma dada arvore usando a funcao auxiliar libera_NO, para a liberacao das ramificacoes da arvore e por fim liberando a raiz
+
+*/
 void libera_ArvBin(ArvBin *raiz) {
     if(raiz == NULL)
         return;
@@ -49,6 +105,14 @@ void libera_ArvBin(ArvBin *raiz) {
     *raiz = NULL;
 }
 
+// ------------------------------------- FUNCOES RELACIONADAS AS ARVORES --------------------------------------//
+
+/*
+    FUNCAO altura_ArvBin:
+
+        Funcao que retorna a altura da arvore binaria inteira
+
+*/
 int altura_ArvBin(ArvBin* raiz){
     if (raiz == NULL)
         return 0;
@@ -63,6 +127,13 @@ int altura_ArvBin(ArvBin* raiz){
 
 }
 
+
+/*
+    FUNCAO totalNO_ArvBin:
+
+        Retorna o total de nos existentes na arvore
+
+*/
 int totalNO_ArvBin(ArvBin *raiz) {
     if(raiz == NULL)
         return 0;
@@ -72,6 +143,44 @@ int totalNO_ArvBin(ArvBin *raiz) {
     int alt_dir = totalNO_ArvBin(&((*raiz)->dir));
     return (alt_dir+alt_esq+1);
 }
+
+/*
+    FUNCAO maior_ArvBin:
+
+        Retorna maior candidato pelo sistema de comparaCandidato()
+
+*/
+Candidato *maior_ArvBin(ArvBin *raiz){
+    if(raiz == NULL) 
+        return NULL;
+    if((*raiz)->dir == NULL) 
+        return (*raiz)->info;
+    return maior_ArvBin(&((*raiz)->dir));
+}
+
+/*
+    FUNCAO menor_ArvBin:
+
+        Retorna menor candidato pelo sistema de comparaCandidato()
+
+*/
+Candidato *menor_ArvBin(ArvBin *raiz){
+    if(raiz == NULL) return NULL;
+    if((*raiz)->esq == NULL) return (*raiz)->info;
+    return menor_ArvBin(&((*raiz)->esq));
+}
+
+// ------------------------------------- INSERCAO E REMOCAO DE DADOS --------------------------------------//
+/*
+    Funcao de Insercao:
+
+        - A insercao na arvore binaria funciona da seguinte maneira:
+            Passo 1: Se a raiz for vazia insere na raiz
+            Passo 2: Se raiz nao for vazia pedimos o retorno de comparaCandidatos(cand,raiz)
+            Passo 3: Se o retorno for menor do que zero, va para o Passo 1 e considere a nova raiz como sendo o filho a esquerda de raiz
+            Passo 4: Se o retorno for maior do que zero, va para o Passo 1 e considere a nova raiz como sendo o filho a direita de raiz
+            Passo 5: Se o retorno for igual a zero finalize a insercao, pois, elementos duplicados nao devem ser inseridos
+*/
 
 int insere_ArvBin(ArvBin* raiz, Candidato *cand){
     if (raiz == NULL) return 0;
@@ -114,6 +223,11 @@ int insere_ArvBin(ArvBin* raiz, Candidato *cand){
     return 1;   
 }
 
+/*
+    Funcao de remove_atual:
+
+        A funcao remove_atual, remove um determinado no de uma arvore ao fazer a troca dos ponteiros das raificacoes do no em questao, dependendo se as arvores a esquerda ou a direita forem iguais a NULL
+*/
 struct NO* remove_atual(struct NO* atual) {
     struct NO *no1, *no2;
 
@@ -141,6 +255,21 @@ struct NO* remove_atual(struct NO* atual) {
     return no2;
 }
 
+/*
+    Funcao de Remocao:
+
+        - A remocao na arvore binaria funciona da seguinte maneira:
+            Passo 1: Se a raiz for retorne 0
+            Passo 2: Se raiz nao for vazia pedimos o retorno de comparaCandidatos(cand,raiz)
+            Passo 3: Se o retorno for menor do que zero, va para o Passo 1 e considere a nova raiz como sendo o filho a esquerda de raiz
+            Passo 4: Se o retorno for maior do que zero, va para o Passo 1 e considere a nova raiz como sendo o filho a direita de raiz
+            Passo 5: Se o retorno for igual a zero verifique se a raiz atual eh igual a raiz principal da arvore
+            Passo 6: Se for faca remove_atual(raiz)
+            Passo 7: Se nao verifique se a raiz atual eh igual a raiz anterior a atual a direita
+            Passo 8: Se for faca ant->dir = remove_atual(atual)
+            Passo 9: Se nao faca ant->esq = remove_atual(atual)
+            
+*/
 int remove_ArvBin(ArvBin *raiz, Candidato *valor) {
     if(raiz == NULL) 
         return 0;
@@ -167,6 +296,23 @@ int remove_ArvBin(ArvBin *raiz, Candidato *valor) {
     return 0;
 }
 
+// ------------------------------------- FUNCOES DE BUSCA --------------------------------------//
+/*
+    Funcoes de Busca:
+
+        - Como ideia central da busca em uma arvore binaria, eh o retorno de uma nova arvore, que vamos chamar de copia, com os candidado que queremos buscar, 
+        nisso ao verificamos qual o tipo dado queremos buscar, se for estado a busca eh dada de uma forma, senao for ela eh dada de maneira diferente. 
+        - Busca estado: Como sabemos que os dados por estado, cidade e numero pela maneira que as insercoes estao sendo feitas, podemos comparar estado da raiz com o estado 
+        buscado, caso a comparacao feita pelo strcmp() seja menor do que zero buscamos na raiz a direita, caso seja maior do que zero buscamos na raiz a esquerda, por fim se for 
+        igual a zero fazemos a insercao em copia e buscamos em ambas as subarvores.
+        - Busca gera: Como sabemos que os dados por estado, cidade e numero pela maneira que as insercoes estao sendo feitas, os dados podem estar tanto na arvore a esquerda quanto 
+        na arvore a direita entao apenas comparamos dado da raiz com o dado buscado, caso a comparacao feita pelo strcmp() seja igual a zero fazemos a insercao em copia e 
+        depois buscamos em ambas as subarvores.
+        - Esse processo eh repetido ate que todas as ocorrencias do dado seja encontrado na arvore.
+        
+*/
+
+// Busca Estado
 void buscaEstadoABBAux(ArvBin *raiz, char *estado, ArvBin *copia){
     if(raiz == NULL || *raiz == NULL) return;
 
@@ -194,6 +340,7 @@ ArvBin *buscaEstadoABB(ArvBin *raiz, char *estado){
     return copia;
 }
 
+// Busca Cidade
 void buscaCidadeABBAux(ArvBin *raiz, char *cidade, ArvBin *copia){
     if(raiz == NULL || *(raiz) == NULL) return;
 
@@ -202,15 +349,9 @@ void buscaCidadeABBAux(ArvBin *raiz, char *cidade, ArvBin *copia){
     if(cmp == 0){
 
         insere_ArvBin(copia, criaCandidato(getEstadoCandidato((*raiz)->info), getCidadeCandidato((*raiz)->info), getNumeroCandidato((*raiz)->info), getCargo((*raiz)->info), getNomeCompleto((*raiz)->info), getNomeUrna((*raiz)->info), getPartido((*raiz)->info), getGenero((*raiz)->info), getGrau((*raiz)->info), getCor((*raiz)->info)));
-        buscaCidadeABBAux(&((*raiz)->dir), cidade, copia);
-        buscaCidadeABBAux(&((*raiz)->esq), cidade, copia);
-        return;
     }
-    else if(cmp < 0){
-        return buscaCidadeABBAux(&((*raiz)->dir), cidade, copia);
-    }
-    else
-        return buscaCidadeABBAux(&((*raiz)->esq), cidade, copia);
+    buscaCidadeABBAux(&((*raiz)->dir), cidade, copia);
+    buscaCidadeABBAux(&((*raiz)->esq), cidade, copia);
 }
 
 ArvBin *buscaCidadeABB(ArvBin *raiz, char *cidade) {
@@ -219,6 +360,7 @@ ArvBin *buscaCidadeABB(ArvBin *raiz, char *cidade) {
     return copia;
 }
 
+// Busca Numero
 void buscaNumeroABBAux(ArvBin *raiz, char *numero, ArvBin *copia){
     if(raiz == NULL || *(raiz) == NULL) return;
 
@@ -226,13 +368,9 @@ void buscaNumeroABBAux(ArvBin *raiz, char *numero, ArvBin *copia){
 
     if(cmp == 0){
         insere_ArvBin(copia, criaCandidato(getEstadoCandidato((*raiz)->info), getCidadeCandidato((*raiz)->info), getNumeroCandidato((*raiz)->info), getCargo((*raiz)->info), getNomeCompleto((*raiz)->info), getNomeUrna((*raiz)->info), getPartido((*raiz)->info), getGenero((*raiz)->info), getGrau((*raiz)->info), getCor((*raiz)->info)));
-        return;
     }
-    else if(cmp < 0){
-        return buscaNumeroABBAux(&((*raiz)->dir), numero, copia);
-    }
-    else
-        return buscaNumeroABBAux(&((*raiz)->esq), numero, copia);
+    buscaNumeroABBAux(&((*raiz)->dir), numero, copia);
+    buscaNumeroABBAux(&((*raiz)->esq), numero, copia);
 }
 
 ArvBin *buscaNumeroABB(ArvBin *raiz, char *numero){
@@ -242,6 +380,7 @@ ArvBin *buscaNumeroABB(ArvBin *raiz, char *numero){
     return copia;
 }
 
+// Busca Genero
 void buscaGeneroABBAux(ArvBin *raiz, char *genero, ArvBin *copia){
     if(raiz == NULL || *(raiz) == NULL) return;
 
@@ -262,6 +401,7 @@ ArvBin *buscaGeneroABB(ArvBin *raiz, char *genero){
     return copia;
 }
 
+// Busca Partido
 void buscaPartidoABBAux(ArvBin *raiz, char *partido, ArvBin *copia){
     if(raiz == NULL || *(raiz) == NULL) return;
 
@@ -281,6 +421,7 @@ ArvBin *buscaPartidoABB(ArvBin *raiz, char *partido){
     return copia;
 }
 
+// Busca Cor/Raca
 void buscaCorRacaABBAux(ArvBin *raiz, char *corRaca, ArvBin *copia){
     if(raiz == NULL || *(raiz) == NULL) return;
 
@@ -299,6 +440,16 @@ ArvBin *buscaCorRacaABB(ArvBin *raiz, char *corRaca){
 
     return copia;
 }
+// ------------------------------------- FUNCOES DE IMPRESAO EM ARVORES BINARIAS --------------------------------------//
+/*
+    Funcao preOrdem_ArvBin:
+
+        A funcao faz a impressao de forma recursiva seguindo a ordem:
+            - Imprime a raiz
+            - Imprime o filho a esquerda
+            - Imprime o filho a direita
+        
+*/
 
 void preOrdem_ArvBin(ArvBin *raiz) {
     if(raiz == NULL||*raiz == NULL) {
@@ -311,6 +462,16 @@ void preOrdem_ArvBin(ArvBin *raiz) {
         preOrdem_ArvBin(&((*raiz)->dir));
     }
 }
+
+/*
+    Funcao emOrdem_ArvBin:
+    
+        A funcao faz a impressao de forma recursiva seguindo a ordem:
+            - Imprime o filho a esquerda
+            - Imprime a raiz
+            - Imprime o filho a direita
+        
+*/
 void emOrdem_ArvBin(ArvBin *raiz) {
     if (raiz == NULL) {
         printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
@@ -322,6 +483,16 @@ void emOrdem_ArvBin(ArvBin *raiz) {
         emOrdem_ArvBin(&((*raiz)->dir));
     }
 }
+
+/*
+    Funcao posOrdem_ArvBin:
+    
+        A funcao faz a impressao de forma recursiva seguindo a ordem:
+            - Imprime o filho a esquerda
+            - Imprime o filho a direita
+            - Imprime a raiz
+        
+*/
 void posOrdem_ArvBin(ArvBin *raiz) {
     if(raiz == NULL) {
         printf("\033[47;30m\nCandidato(s) nao encontrado(s).\033[0m\n");
@@ -334,21 +505,16 @@ void posOrdem_ArvBin(ArvBin *raiz) {
     }
 }
 
-Candidato *maior_ArvBin(ArvBin *raiz){
-    if(raiz == NULL) 
-        return NULL;
-    if((*raiz)->dir == NULL) 
-        return (*raiz)->info;
-    return maior_ArvBin(&((*raiz)->dir));
-}
-
-Candidato *menor_ArvBin(ArvBin *raiz){
-    if(raiz == NULL) return NULL;
-    if((*raiz)->esq == NULL) return (*raiz)->info;
-    return menor_ArvBin(&((*raiz)->esq));
-}
-
-
+// ------------------------------------- FUNCAO DE LEITURA DE ARQUIVO --------------------------------------//
+/*
+    FUNCAO lerArquivoAbb:
+    
+        - Recebe uma string que sinaliza qual arquivo deve ser lido
+        - Extrai dados de candidatos pela funcao extrairToken
+        - Insere os candidatos de forma sequencial por meio da funcao insere_ArvBin que recebe a arvore binaria e que recebera o candidato e a criacao do candidato 
+        - O candidato a ser inserido eh criado na propria chamada da funcao que insere o candidato no vetor
+        
+*/
 ArvBin *lerArquivoAbb(char *enderecoArquivo) { 
     FILE *arq = fopen(enderecoArquivo, "r");
     if (arq == NULL)
@@ -368,7 +534,6 @@ ArvBin *lerArquivoAbb(char *enderecoArquivo) {
     char genero[50];
     char grauDeInstrucao[50];
     char cor_raca[50];
-    //int ct = 0;
     char linha[500];
     while (fgets(linha, sizeof(linha), arq)){
         extrairToken(linha, estado, ";");
@@ -382,25 +547,7 @@ ArvBin *lerArquivoAbb(char *enderecoArquivo) {
         extrairToken(NULL, grauDeInstrucao, ";");
         extrairToken(NULL, cor_raca, "\n");
         insere_ArvBin(arv, criaCandidato(estado, cidade, numero, cargo, nomeCompleto, nomeUrna, siglaPartido, genero, grauDeInstrucao, cor_raca));
-        //printf("\n%d", ct);
-        //ct++;
     }
     fclose(arq);
     return arv;
-}
-
-// Funcoes auxiliares
-
-char *stripWhitespace(char *str)
-{
-    char *end;
-
-    while(isspace((unsigned char)*str)) str++;
-
-    end = str + strlen(str) - 1;
-    while(end > str && isspace((unsigned char)*end)) end--;
-
-    *(end + 1) = '\0';
-
-    return str;
 }

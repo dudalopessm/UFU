@@ -1,20 +1,20 @@
 /*
-    TRABALHO DE BUSCA DE DADOS DE CANDIDATOS DA ELEICAO DE 2024
-    GRUPO: Eduarda Lopes (12311BCC033), Lucas Matos (12311BCC) e Matheus
-   Vinicius (12311BCC) PROFESSOR: Maria Camila DISCIPLINA: FACOM31303 -
-   ALGORITMOS E ESTRUTURA DE DADOS 2 SEMESTRE: 2024.1 CRÉDITOS: - IMPLEMENTAÇÃO
-   DE ÁRVORE BINÁRIA UTILIZADA:
-   https://www.facom.ufu.br/~backes/gsi011/Aula10-Arvores.pdf -> créditos ao
-   professor André Backes
-              - IMPLEMENTAÇÃO DE ÁRVORE AVL UTILIZADA:
-   https://www.facom.ufu.br/~backes/gsi011/Aula11ArvoreAVL.pdf-> créditos ao
-   professor André Backes
-              - FUNÇÃO AUXILIAR STRIPWHITESPACE:
-   https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way
-   -> stackoverflow
+
+  TRABALHO DE BUSCA DE DADOS DE CANDIDATOS DA ELEICAO DE 2024
+  
+    GRUPO: Eduarda Lopes (12311BCC033), Lucas Matos (12311BCC024) e Matheus Vinicius (12311BCC018)
+
+    PROFESSOR: Maria Camila Nardoni
+
+    DISCIPLINA: FACOM31303 - ALGORITMOS E ESTRUTURA DE DADOS 2 
+
+    SEMESTRE: 2024.1 
+
+    CREDITOS: - IMPLEMENTACAO DE ARVORE BINARIA UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula10-Arvores.pdf -> creditos ao professor Andre Backes
+              - IMPLEMENTACAO DE ARVORE AVL UTILIZADA: https://www.facom.ufu.br/~backes/gsi011/Aula11ArvoreAVL.pdf-> creditos ao professor Andre Backes
+              - FUNCAO AUXILIAR STRIPWHITESPACE: https://stackoverflow.com/questions/122616/how-do-i-trim-leading-trailing-whitespace-in-a-standard-way -> stackoverflow
+
 */
-// ------------------------------------- BIBLIOTECAS
-// --------------------------------------//
 #include "ABBCandidatos.h"
 #include "AVLCandidatos.h"
 #include "Candidatos.h"
@@ -25,14 +25,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-// ------------------------------------- VARIÁVEIS GLOBAIS
-// --------------------------------------//
+// ------------------------------------- VARIAVEIS GLOBAIS --------------------------------------//
 #define true 1
 #define false 0
 char arq[] = "database_Eleicao.txt";
-// ------------------------------------- FUNÇÕES
-// --------------------------------------// função que verifica se a opção está
-// dentro do intervalo dado
+
+// ------------------------------------- FUNCOES --------------------------------------//
+/*
+  FUNCAO verifica:
+
+    Verifica se a opcao esta dentor do intervalo dado
+
+*/
 int verifica(int op, int i, int j) {
   if (op >= i && op <= j) {
     return true;
@@ -40,11 +44,20 @@ int verifica(int op, int i, int j) {
     return false;
 }
 
-// função que sinaliza a opção inválida
+/*
+  FUNCAO opcaoInvalida:
+
+    Funcao que sinaliza a opcao invalida
+
+*/
 void opcaoInvalida() { printf("\nOpcao invalida. Tente novamente."); }
 
-// função que determina a tela inicial do programa - pergunta ao usuário qual
-// arquivo deseja carregar
+/*
+  FUNCAO Inicio:
+
+    Determina a tela inicial do programa - pergunta ao usuario qual arquivo deseja carregar
+
+*/
 char *Inicio() {
   int crtl;
   printf("\033[1;33m\n===================== BEM VINDO AO BUSCA CANDIDATOS "
@@ -52,8 +65,8 @@ char *Inicio() {
   int op = 0;
 
   do {
-    printf("\nEscolha qual arquivo deseja carregar - o padrao corresponde a "
-           "tabela de candidatos disponibilizada pelo TSE ");
+    printf("\nEscolha qual arquivo deseja carregar");
+    printf("\nO arquivo padrao corresponde a tabela do TSE");
     printf("\nDeseja carregar: \n");
     printf("\n1. O arquivo padrao \n");
     printf("\n2. O um novo arquivo \n ");
@@ -65,28 +78,42 @@ char *Inicio() {
       opcaoInvalida();
     }
   } while (crtl != true);
-  FILE *teste;
+
+  FILE *teste = NULL;
+  char *end = NULL;
+  
+
   do {
     if (op == 1) {
       return arq;
-    } else {
+    } 
+    else {
       printf("\nDigite o caminho do arquivo: ");
       setbuf(stdin, NULL);
-      char *end = (char *)malloc(sizeof(char) * 256);
+      end = (char *)malloc(sizeof(char) * 256);
       fgets(end, 256, stdin);
       end[strcspn(end, "\n")] = '\0';
       teste = fopen(end, "r");
-      if (teste != NULL)
+      if (teste != NULL){
         fclose(teste);
-      return end;
+        return end;
+      }
+      free(end);
+      end = NULL;
+      printf("\nARQUIVO INEXISTENTE!!\n");
     }
-  } while (teste != NULL);
+  } while (teste == NULL);
+
   fclose(teste);
+
   return NULL;
 }
 
 /*
-    SUMÁRIO DE RETORNOS DA FUNÇÃO
+  FUNCAO escolherFiltro:
+
+    Auxilia a escolha do usuario caso haja algum filtro a ser aplicado
+    RETORNOS:
     0. sair
     1. busca por estado
     2. busca por cidade de um estado
@@ -97,12 +124,9 @@ char *Inicio() {
     7. filtro de cor da busca por cidade
     8. filtro de genero da busca por cidade
     9. filtro de partido da busca por cidade
-    10. filtro de cor da busca por numero
-    11. filtro de genero da busca por numero
-    12. filtro de partido da busca por numero
-    13. erro
+    10. erro
+
 */
-// auxilia a escolha do usuário
 int escolherFiltro() {
   char opsub;
   int controle;
@@ -140,10 +164,16 @@ int escolherFiltro() {
   return 13;
 }
 
-// menu que captura qual opção de busca o usuário deseja
+/*
+  FUNCAO menuBusca:
+
+    Menu que captura qual opcao de busca o usuario deseja realizar
+
+*/
 int menuBusca() {
   int op;
   int controle;
+
   printf("\n");
   printf("\033[1;32m===================== BUSCAR UM CANDIDATO "
          "======================\n\033[0m");
@@ -151,44 +181,72 @@ int menuBusca() {
   printf("Casos disponiveis: ");
   printf("\n0. Sair do programa");
   printf("\n1. Buscar dados de um candidato de um estado");
-  printf(
-      "\n2. Dado um estado, buscar dados de um candidato de uma dada cidade");
-  printf("\n3. Dado um estado e uma cidade, buscar dados de um candidato de um "
-         "dado numero");
+  printf("\n2. Dado um estado, buscar dados de um candidato de uma dada cidade");
+  printf("\n3. Dado um estado e uma cidade, buscar dados de um candidato de um ""dado numero");
+
   do {
     printf("\nOpcao que deseja testar: ");
     scanf(" %d", &op);
-    while (getchar() != '\n')
-      ;
+    while (getchar() != '\n');
     controle = verifica(op, 0, 3);
+
     if (!controle) {
       opcaoInvalida();
     }
+
   } while (!controle);
+
   switch (op) {
   case 0:
     return 0;
+
   case 1:
     controle = escolherFiltro();
     if (controle == 0)
       return 1;
     return controle; // 4, 5 ou 6
+
   case 2:
     controle = escolherFiltro();
     if (controle == 0)
       return 2;
     return controle + 3; // 7, 8 ou 9
+
   case 3:
     controle = 0;
     if (controle == 0)
       return 3;
-    return controle + 6; // 10, 11 ou 12
+
   }
-  return 13;
+  return 10;
+
 }
 
-// funções para retornar dados digitados - nomes de cidades, estados, partidos,
-// numeros, etc
+/*
+  FUNCAO imprimeBusca:
+
+    Imprime os retornos das buscas
+
+*/
+void imprimeBusca(VetorCandidatos* retornoVet,ArvBin *retornoABB, ArvAVL *retornoAVL ){
+  printf("\033[1m\n========================== Vetor "
+             "==========================\n\033[0m");
+      imprimeVetorInteiro(retornoVet);
+      printf("\033[1m\n========================== Arvore Binaria de Busca "
+             "==========================\n\033[0m");
+      emOrdem_ArvBin(retornoABB);
+      printf("\033[1m\n========================== Arvore Balanceada - AVL "
+             "==========================\n\033[0m");
+      emOrdem_ArvAVL(retornoAVL);
+      printf("\n");
+}
+
+/*
+  FUNCAO maiusculo:
+
+    Retorna os dados digitados em maiusculo para facilitar encontro de informacoes na tabela
+
+*/
 void maiusculo(char *palavra) {
   int i = 0;
   while (palavra[i] != '\0') {
@@ -196,14 +254,21 @@ void maiusculo(char *palavra) {
     i++;
   }
 }
+
+/*
+  FUNCOES de digitacao:
+
+    - Realizam a requisicao de escrita para o usuario
+    - Possui tipos para: estado, cidade, numero, cor, genero e partido
+
+*/
 char *digitaEstado() {
   printf("\nDigite o estado desejado (sigla com 2 letras): ");
   char *est = malloc(4 * sizeof(char));
   if (est == NULL)
     return NULL;
   scanf(" %s", est);
-  while (getchar() != '\n')
-    ;
+  while (getchar() != '\n');
   maiusculo(est);
   return est;
 }
@@ -265,8 +330,13 @@ char *digitaPartido() {
   return part;
 }
 
-// funções para o cálculo do tempo
 
+/*
+  FUNCAO menuBusca:
+
+    Realiza o calculo do tempo e retorna os dados em uma tabela
+
+*/
 void calculoTempo(time_t *timeInicial, time_t *timeFinal, double *time_total) {
   for (int i = 0; i < 3; i++) {
     time_total[i] = (double)(timeFinal[i] - timeInicial[i]) / CLOCKS_PER_SEC;
@@ -282,13 +352,26 @@ void calculoTempo(time_t *timeInicial, time_t *timeFinal, double *time_total) {
   printf("====================================================\n");
 }
 
-//__________________________________________________________________________________________________//
+/*
+  FUNCAO libera:
 
-// ------------------------------------- MAIN
-// --------------------------------------//
+    Libera ponteiros
+
+*/
+void libera(void *ponteiro){
+  if(ponteiro == NULL)
+    return;
+  free(ponteiro);
+}
+
+// ------------------------------------- MAIN --------------------------------------//
 int main() {
-  // parte inicial - mostra tela de inicio e marca os tempos de abertura de cada
-  // estrutura de dados
+  /*
+    Parte inicial:
+      - Mostra a tela de inicio pela chamada da funcao
+      - Marca o tempo de abertura de cada estrutura de dados no arquivo escolhido
+  */
+
   time_t *timeInicial = (time_t *)malloc(sizeof(time_t) * 3);
   time_t *timeFinal = (time_t *)malloc(sizeof(time_t) * 3);
   double *tempo_total = (double *)malloc(sizeof(double) * 3);
@@ -312,27 +395,43 @@ int main() {
   printf("\n");
   calculoTempo(timeInicial, timeFinal, tempo_total);
 
-  // ------------------------------------- BUSCAS
-  // --------------------------------------//
-
+// ------------------------------------- BUSCAS --------------------------------------//
   int opcaoBusca;
   opcaoBusca = -1;
+
+  // Estruturas auxiliares para retorno das buscas
   VetorCandidatos *retornoVet;
   ArvBin *retornoABB;
   ArvAVL *retornoAVL;
-  char *estado, *cidade, *numero, *cor, *genero, *partido;
 
+  // Variaveis para auxiliar na escolha de opcoes
+  char *estado = NULL, *cidade = NULL, *numero = NULL, *cor = NULL, *genero = NULL, *partido = NULL;
+
+  // Execucao do loop do menu
   while (opcaoBusca != 0) {
     opcaoBusca = menuBusca();
     switch (opcaoBusca) {
+
+      /*
+        CASO 0: 
+
+          Sair do programa
+
+      */
     case 0:
       printf("\nSaindo do programa...");
       break;
-    case 1: // busca por estado somente
+
+      /*
+        CASO 1: 
+
+          Busca apenas por estado
+          
+      */
+    case 1:
       // system("cls");
       printf("\033[1;37m\n===================== BUSCA POR ESTADO "
              "======================\n\033[0m");
-
       estado = digitaEstado();
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
@@ -350,21 +449,21 @@ int main() {
       retornoAVL = buscaEstadoAVL(arv, estado);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
 
       printf("\n");
+
       break;
-    case 2: // busca por estado e cidade
+
+      /*
+        CASO 2: 
+
+          Dado um estado, busca uma cidade
+          
+      */
+    case 2:
       // system("cls");
       printf("\033[1;37m\n===================== BUSCA POR ESTADO E CIDADE "
              "======================\n\033[0m");
@@ -373,7 +472,6 @@ int main() {
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
       }
-
       cidade = digitaCidade();
       if (cidade != NULL) {
         printf("\nCidade digitada: %s", cidade);
@@ -393,20 +491,20 @@ int main() {
       retornoAVL = buscaCidadeAVL(retornoAVL, cidade);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
 
+      printf("\n");
       break;
-    case 3: // busca por numero dado um estado e cidade
+
+        /*
+        CASO 3: 
+
+          Dado um estado e cidade, busca um numero
+          
+      */
+    case 3:
       // system("cls");
       printf("\033[1;37m\n===================== BUSCA POR NUMERO DADO UM "
              "ESTADO E UMA CIDADE ======================\n\033[0m");
@@ -415,12 +513,10 @@ int main() {
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
       }
-
       cidade = digitaCidade();
       if (cidade != NULL) {
         printf("\nCidade digitada: %s", cidade);
       }
-
       numero = digitaNumero();
       if (numero != NULL) {
         printf("\nNumero digitado: %s", numero);
@@ -443,20 +539,19 @@ int main() {
       retornoAVL = buscaNumeroAVL(retornoAVL, numero);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
-      printf("\n");
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
 
+      printf("\n");
       break;
+
+      /*
+        CASO 4: 
+
+          Dado um estado, busca uma cor
+          
+      */
     case 4: // busca por cor dado apenas um estado
       // system("cls");
       printf("\n");
@@ -488,31 +583,29 @@ int main() {
       retornoAVL = buscaCorRacaAVL(retornoAVL, cor);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
 
       printf("\n");
-
       break;
+
+      /*
+        CASO 5: 
+
+          Dado um estado busca um genero
+          
+      */
     case 5: // busca por genero dado apenas um estado
       // system("cls");
       printf("\n");
       printf("\033[1;95m===================== FILTRAR POR GENERO DADO UM "
              "ESTADO ======================\033[0m\n");
+
       estado = digitaEstado();
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
       }
-
       genero = digitaGenero();
       if (genero != NULL) {
         printf("\nGenero digitado: %s", genero);
@@ -533,20 +626,19 @@ int main() {
       retornoAVL = buscaGeneroAVL(retornoAVL, genero);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
-      printf("\n");
 
+      printf("\n");
       break;
+
+      /*
+        CASO 6: 
+
+          Dado um estado busca um partido
+          
+      */
     case 6: // busca por partido dado apenas um estado
       // system("cls");
       printf("\n");
@@ -557,7 +649,6 @@ int main() {
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
       }
-
       partido = digitaPartido();
       if (partido != NULL) {
         printf("\nPartido digitado: %s", partido);
@@ -578,36 +669,33 @@ int main() {
       retornoAVL = buscaPartidoAVL(retornoAVL, partido);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
-      printf("\n");
 
+      printf("\n");
       break;
-    case 7: // busca por cor dado um estado e uma cidade
+
+      /*
+        CASO 7: 
+
+          Dado um estado e uma cidade, busca uma cor
+          
+      */
+    case 7: 
       // system("cls");
       printf("\n");
       printf("\033[1;96m===================== FILTRAR POR COR DADO UM ESTADO E "
              "UMA CIDADE ======================\033[0m\n");
-      estado = digitaEstado();
 
+      estado = digitaEstado();
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
       }
-
       cidade = digitaCidade();
       if (cidade != NULL) {
         printf("\nCidade digitada: %s", cidade);
       }
-
       cor = digitaCor();
       if (cor != NULL) {
         printf("\nCor digitada: %s", cor);
@@ -630,20 +718,19 @@ int main() {
       retornoAVL = buscaCorRacaAVL(retornoAVL, cor);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
-      printf("\n");
 
+      printf("\n");
       break;
+
+      /*
+        CASO 8: 
+
+          Dado um estado e uma cidade, busca um genero
+          
+      */
     case 8: // busca por genero dado um estado e uma cidade
       // system("cls");
       printf("\n");
@@ -654,12 +741,10 @@ int main() {
       if (estado != NULL) {
         printf("\nEstado digitado: %s", estado);
       }
-
       cidade = digitaCidade();
       if (cidade != NULL) {
         printf("\nCidade digitada: %s", cidade);
       }
-
       genero = digitaGenero();
       if (genero != NULL) {
         printf("\nGenero digitado: %s", genero);
@@ -682,22 +767,20 @@ int main() {
       retornoAVL = buscaGeneroAVL(retornoAVL, genero);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
 
       printf("\n");
-
       break;
-    case 9: // busca por partido dado um estado e uma cidade
+
+      /*
+        CASO 9: 
+
+          Dado um estado e uma cidade, busca um partido
+          
+      */
+    case 9:
       // system("cls");
       printf("\n");
       printf("\033[1;91m===================== FILTRAR POR PARTIDO DADO UM "
@@ -719,7 +802,7 @@ int main() {
       }
 
       timeInicial[0] = clock();
-      retornoVet = buscaBinariaCidade(retornoVet, cidade, estado);
+      retornoVet = buscaBinariaCidade(vet, cidade, estado);
       retornoVet = buscaBinariaPartido(retornoVet, partido);
       timeFinal[0] = clock();
 
@@ -735,54 +818,59 @@ int main() {
       retornoAVL = buscaPartidoAVL(retornoAVL, partido);
       timeFinal[2] = clock();
 
-      printf("\033[1m\n========================== Vetor "
-             "==========================\n\033[0m");
-      imprimeVetorInteiro(retornoVet);
-      printf("\033[1m\n========================== Arvore Binaria de Busca "
-             "==========================\n\033[0m");
-      emOrdem_ArvBin(retornoABB);
-      printf("\033[1m\n========================== Arvore Balanceada - AVL "
-             "==========================\n\033[0m");
-      emOrdem_ArvAVL(retornoAVL);
+      imprimeBusca(retornoVet,retornoABB, retornoAVL);
 
       calculoTempo(timeInicial, timeFinal, tempo_total);
 
       printf("\n");
-
       break;
+
+      /*
+        CASO 10: 
+
+          Erro da funcao
+          
+      */
+    case 10:
+      printf("\nErro na funcao de menu");
+      break;
+
+      /*
+        DEFAULT:
+
+          Opcao invalida no switch
+          
+      */
     default:
       printf("\nErro ao processar opcao no menu.");
       break;
+
     }
+
   }
 
-  // ------------------------------------- LIBERAÇÃO ESTRUTURAS USADAS
-  // --------------------------------------//
-
+ // ------------------------------------- LIBERACAO DAS ESTRUTURAS --------------------------------------//
   // Strings auxiliares
-  free(estado);
-  free(cidade);
-  free(numero);
-  free(genero);
-  free(cor);
-  free(partido);
+  libera((void *)estado);
+  libera((void *)cidade);
+  libera((void *)numero);
+  libera((void *)genero);
+  libera((void *)cor);
+  libera((void *)partido);
 
   // Estruturas de calculo de tempo
   free(timeInicial);
   free(timeFinal);
   free(tempo_total);
-
+  
   // AVL, Arvore Binaria e vetor
-  libera_ArvAVL(retornoAVL);
-  libera_ArvBin(retornoABB);
-  libera_vetor(retornoVet);
+  libera_vetor(vet);
   libera_ArvAVL(arv);
   libera_ArvBin(bin);
-  libera_vetor(vet);
 
-  // -----------------------------------------------------------------------------------------------
-  // // fim
-  printf("\n");
+// ------------------------------------- FIM --------------------------------------//
+  printf("\nFim do programa...");
   // system("pause");
   return 0;
+
 }
