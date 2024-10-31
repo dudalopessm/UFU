@@ -1,7 +1,8 @@
+import java.util.ArrayList;
 public class Familia extends Contato {
     private String parentesco;
-    public Familia(String nome, String apelido, String email, String aniversario, String parentesco) {
-        super(nome, apelido, email, aniversario);
+    public Familia(String nome, String apelido, String email, String aniversario, String parentesco, ArrayList<Contato> base) {
+        super(nome, apelido, email, aniversario, base);
         this.parentesco = parentesco;
     }
 

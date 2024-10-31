@@ -1,8 +1,9 @@
+import java.util.ArrayList;
 public class Trabalho extends Contato {
     private String tipo;
 
-    public Trabalho(String nome, String apelido, String email, String aniversario, String tipo) {
-        super(nome, apelido, email, aniversario);
+    public Trabalho(String nome, String apelido, String email, String aniversario, String tipo, ArrayList<Contato> base) {
+        super(nome, apelido, email, aniversario, base);
         this.tipo = tipo;
     }
 

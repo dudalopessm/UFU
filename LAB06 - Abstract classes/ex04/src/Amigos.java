@@ -1,8 +1,9 @@
+import java.util.ArrayList;
 public class Amigos extends Contato {
     private int grau; // 1 = melhor amigo, 2 = amigo, 3 = conhecido
 
-    public Amigos(String nome, String apelido, String email, String aniversario, int grau) {
-        super(nome, apelido, email, aniversario);
+    public Amigos(String nome, String apelido, String email, String aniversario, int grau, ArrayList<Contato> base) {
+        super(nome, apelido, email, aniversario, base);
         setGrau(grau);
     }
 
