@@ -1,0 +1,8 @@
+EXERCÍCIO 03:
+---------- PERGUNTAS ----------
+a) Qual a diferença entre o throw e throws ? Justifique explicado o que cada comando faz
+b) Indique a diferença entre checked e unchecked exceptions
+---------- RESPOSTAS ----------
+a) O throws delega o tratamento da exceção para o método que chamou o atual que jogou a exceção e deve estar na assinatura do método. Por outro lado, o throw lança uma exception dentro do método, a qual pode ser tratada pelo método que chamou o método lançador. Os tratamentos são feitos por meio da clausula try/catch dentro do método desejado.
+
+b) As exceções unchecked são da classe RuntimeException ou suas subclasses, e apesar de serem exceções, não precisam de serem tratadas obrigatoriamente e por isso são unchecked. Já todas as exceções filhas de classes que não são RuntimeException devem ser tratadas obrigatoriamente em todos os métodos que as englobam, e um exemplo de uma checked são as IOExceptions.
