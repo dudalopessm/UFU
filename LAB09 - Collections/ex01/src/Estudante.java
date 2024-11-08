@@ -30,5 +30,16 @@ public abstract class Estudante {
         this.endereco = endereco;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Estudante that = (Estudante) obj;
+        return this.nome.equals(that.nome);
+    }
 
+    @Override
+    public int hashCode() {
+        return nome.hashCode();
+    }
 }
