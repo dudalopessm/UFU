@@ -1,5 +1,5 @@
 import java.awt.*;
-public abstract class Estudante {
+public abstract class Estudante implements Comparable<Estudante> {
     private String nome;
     private String endereco;
 
@@ -41,5 +41,9 @@ public abstract class Estudante {
     @Override
     public int hashCode() {
         return nome.hashCode();
+    }
+
+    public int compareTo(Estudante prox) {
+        return this.getNome().compareToIgnoreCase(prox.getNome());
     }
 }

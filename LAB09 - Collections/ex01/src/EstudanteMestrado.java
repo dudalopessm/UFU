@@ -39,4 +39,5 @@ public class EstudanteMestrado extends EstudantePosGrad {
     public void setTituloDissertacao(String tituloDissertacao) {
         this.tituloDissertacao = tituloDissertacao;
     }
+
 }

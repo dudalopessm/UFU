@@ -25,4 +25,5 @@ public class EstudanteGraduacao extends Estudante {
     public void setTituloTCC(String tituloTCC) {
         this.tituloTCC = tituloTCC;
     }
+
 }

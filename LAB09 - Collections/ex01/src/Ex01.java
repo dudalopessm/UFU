@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -18,7 +19,8 @@ public class Ex01 {
         listateste.add(new EstudanteDoutorado("Gustavo", "Rua Lua", "Física", "Astrofísica", "Buracos Negros"));
         listateste.add(new EstudanteDoutorado("Ana", "Rua Vento", "Química", "Reações Orgânicas", "Síntese de Fármacos"));
 
-        System.out.println("\n*********** Estudantes antes das alterações (ArrayList) ***********");
+        System.out.println("\n*********** Estudantes ordenados antes das alterações (ArrayList) ***********");
+        Collections.sort(listateste);
         System.out.println("__________________________________________________________");
         for(Estudante a : listateste) {
             a.print();
@@ -33,7 +35,7 @@ public class Ex01 {
                 iter.remove();
         }
 
-        System.out.println("\n*********** Estudantes após alterações (ArrayList) ***********");
+        System.out.println("\n*********** Estudantes ordenados após alterações (ArrayList) ***********");
         System.out.println("__________________________________________________________");
         for(Estudante a : listateste) {
             a.print();
