@@ -1,21 +1,10 @@
-public class Disciplinas {
-        /*
-- Vamos registrar as atividades acadêmicas de uma universidade
-- 1) É necessário fazer o cadastro de estudantes. Para eles são armazenadas as informações de CPF, Nome, Data de Nascimento, CRA
-- 2) É necessário fazer o cadastro de Professores. Para eles são armazenados o CPF, Nome, Data de Nascimento, Início do contrato,
-Departamento Vinculado
-3) Os estudantes podem ser de graduação ou pós-graduação. Os alunos de graduação devem realizar um estágio supervisionado.
-Já os de pós-graduação devem ter um tema de pesquisa
-4) As disciplinas possuem um código, um nome e uma carga horária
-5) Devem ser criadas turmas para as disciplinas, indicando o semestre e ano da turma.
-Faça um programa principal que permita realizar o cadastro e consulta de todas essas informações.
-Para facilitar o teste do sistema, crie algumas funções para popular o sistema (colocar dados) sem a necessidade de digitação,
-embora a possibilidade de cadastrar os dados deva estar disponível.
-     */
+import java.util.ArrayList;
+public class Disciplinas implements ConvertString{
     //Atributos
-    public String codigo;
-    public String nome;
-    public String cargaHoraria;
+    private String codigo;
+    private String nome;
+    private String cargaHoraria;
+    private ArrayList<Turma> turmas = new ArrayList<>();
 
     //Construtor
     public Disciplinas(String nome, String codigo, String cargaHoraria) {
@@ -44,7 +33,20 @@ embora a possibilidade de cadastrar os dados deva estar disponível.
         this.cargaHoraria = cargaHoraria;
     }
 
+    public String toString() {
+        String disSTR = "Codigo: "+ this.getCodigo()+"\nNome: "+ this.getNome()+"\nCarga Horaria: "+ this.getCargaHoraria();
+        for(Turma aux: turmas){
+            disSTR += aux.toString();
+        }
+        return disSTR;
+    }
+
     //Mudanças cadastrais
+    public boolean criaTurma(String semestre, int ano){
+        Turma nova = new Turma(semestre, ano);
+        return turmas.add(nova);
+    }
+
     public boolean mudaNome(String novo) {
         if(this.nome.equalsIgnoreCase(novo)) {
             System.out.println("Nome anterior idêntico ao novo. Tente novamente.");

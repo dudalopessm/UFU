@@ -1,4 +1,4 @@
-public class Turma {
+public class Turma implements ConvertString{
             /*
 - Vamos registrar as atividades acadêmicas de uma universidade
 - 1) É necessário fazer o cadastro de estudantes. Para eles são armazenadas as informações de CPF, Nome, Data de Nascimento, CRA
@@ -13,29 +13,27 @@ Para facilitar o teste do sistema, crie algumas funções para popular o sistema
 embora a possibilidade de cadastrar os dados deva estar disponível.
      */
     //Atributos
-    public Disciplinas materia;
     public String semestre;
     public int ano;
 
     //Construtor
-    public Turma(Disciplinas materia, String semestre, int ano) {
-        this.materia = new Disciplinas(materia.getNome(), materia.getCodigo(), materia.getCargaHoraria());
+    public Turma(String semestre, int ano) {
         this.semestre = semestre;
         this.ano = ano;
     }
 
     //Getters e setters
-    public Disciplinas getMateria() {
-        return materia;
-    }
-    public void setMateria(Disciplinas materia) {
-        this.materia = materia;
-    }
+    
     public String getSemestre() {
         return semestre;
     }
     public void setSemestre(String semestre) {
-        this.semestre = semestre;
+        if(verificaSemestre(semestre)){
+            this.semestre = semestre;
+        }
+        else{
+            System.out.println("Erro de formato, tente novamente!");
+        }
     }
     public int getAno() {
         return ano;
@@ -44,8 +42,13 @@ embora a possibilidade de cadastrar os dados deva estar disponível.
         this.ano = ano;
     }
 
+    public String toString() {
+        return "\nSemestre: "+ semestre + "\nAno: "+ ano;
+    }
+
     //Verificação da formatação do semestre (ano.semestre)
     public boolean verificaSemestre(String sem) {
-
+        String modelo = "\\d{4}\\.\\d{1}"; //Formato xxxx.x
+        return sem.matches(modelo);
     }
 }
