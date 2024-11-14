@@ -1,13 +1,21 @@
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public abstract class Estudante extends Dados_Pessoa{
     private double CRA;
+    private ArrayList<Turma> turmasMatriculadas = new ArrayList<Turma>();
     
     //Construtor
-    public Estudante(String nome, String data, String CPF, double CRA){
-        super(nome, data, CPF);
+    public Estudante(String login, String nome, String data, String CPF, double CRA){
+        super(login, nome, data, CPF);
         setCRA(CRA);
+    }
+
+    public Estudante(String login, String nome, String data, String CPF, double CRA, ArrayList<Turma> turmasMatriculadas) {
+        super(login, nome, data, CPF);
+        setCRA(CRA);
+        matriculaEstudanteEmDisciplinas(turmasMatriculadas);
     }
 
     //Getters e setters
@@ -24,7 +32,7 @@ public abstract class Estudante extends Dados_Pessoa{
                 verificaCRA(cra);
                 this.CRA = cra;
                 veri = true;
-            } catch(ValidacaoCRA e) {
+            } catch(CRAInvalidoException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Digite o CRA novamente, de 0 a 100: ");
                 try {
@@ -37,15 +45,23 @@ public abstract class Estudante extends Dados_Pessoa{
         }
     }
 
+    public ArrayList<Turma> getTurmasMatriculadas() {
+        return turmasMatriculadas;
+    }
+
+    private void setTurmasMatriculadas(ArrayList<Turma> turmasMatriculadas) {
+        this.turmasMatriculadas = turmasMatriculadas;
+    }
+
     @Override
     public String toString(){
         return super.toString() + "\nCRA: " + this.CRA;
     }
 
      //Verifica se CRA é número entre 0 e 100
-     public boolean verificaCRA(double cra) throws ValidacaoCRA {
+     public boolean verificaCRA(double cra) throws CRAInvalidoException {
         if(cra < 0 || cra > 100) {
-            throw new ValidacaoCRA("CRA deve estar entre 0 e 100.");
+            throw new CRAInvalidoException("CRA deve estar entre 0 e 100.");
         }
         return true;
     }
@@ -57,5 +73,52 @@ public abstract class Estudante extends Dados_Pessoa{
             return true;
         }
         return false;
+    }
+
+    //Matrícula e desmatricula
+    public boolean matriculaEstudanteEmDisciplinas(ArrayList<Turma> disc) {
+        if(this.getTurmasMatriculadas().isEmpty()) {
+            for(int i = 0; i < disc.size(); i++)
+                disc.get(i).matriculaUmAluno(this);
+            this.getTurmasMatriculadas().addAll(disc);
+            return true;
+        } else {
+            for(int i = 0; i < disc.size(); i++) {
+                if(!this.getTurmasMatriculadas().contains(disc.get(i))) {
+                    disc.get(i).matriculaUmAluno(this);
+                    this.getTurmasMatriculadas().add(disc.get(i));
+                }
+            }
+        }
+        if(this.getTurmasMatriculadas().isEmpty())
+            return false;
+        else
+            return true;
+    }
+
+    public boolean matriculaEstudanteEmUmaDisciplina(Turma disc) {
+        if(this.getTurmasMatriculadas().isEmpty()) {
+            disc.matriculaUmAluno(this);
+            this.getTurmasMatriculadas().add(disc);
+            return true;
+        } else {
+            if(this.getTurmasMatriculadas().contains(disc))
+                return false;
+            else {
+                disc.matriculaUmAluno(this);
+                this.getTurmasMatriculadas().add(disc);
+                return true;
+            }
+        }
+    }
+
+    public boolean desmatriculaEstudanteEmDisciplina(Turma disc) {
+        if(this.getTurmasMatriculadas().contains(disc)) {
+            disc.desmatriculaAluno(this);
+            this.getTurmasMatriculadas().remove(disc);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

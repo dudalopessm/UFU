@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Professor extends Dados_Pessoa{
@@ -8,10 +9,11 @@ public class Professor extends Dados_Pessoa{
     private Universidade universidade;
     private String inicioContrato;
     public String departamento;
+    private ArrayList<Disciplinas> ministradas = new ArrayList<Disciplinas>();
 
     //Construtor
-    public Professor(String nome, String data, String CPF, String departamento, String inicioContrato, Universidade universidade) {
-        super(nome, data, CPF);
+    public Professor(String login, String nome, String data, String CPF, String departamento, String inicioContrato, Universidade universidade) {
+        super(login, nome, data, CPF);
         this.departamento = departamento;
         this.universidade = universidade;
         setInicioContrato(inicioContrato);
@@ -32,7 +34,7 @@ public class Professor extends Dados_Pessoa{
                 verificaDataContrato(input);
                 this.inicioContrato = input;
                 veri = true;
-            } catch(ValidacaoContrato e) {
+            } catch(DataInvalidaException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Digite nova data de início do contrato no formato dd/mm/aaaa: ");
                 input = sc.nextLine();
@@ -65,7 +67,7 @@ public class Professor extends Dados_Pessoa{
     //Verificação data do contrato
     private void verificaDataContrato(String data) {
         if(!verificaData(data)) {
-            throw new ValidacaoContrato("Data deve estar no formato dd/mm/aaaa");
+            throw new DataInvalidaException("Data deve estar no formato dd/mm/aaaa");
         }
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -74,13 +76,13 @@ public class Professor extends Dados_Pessoa{
             LocalDate hoje = LocalDate.now();
 
             if(dataContrato.isBefore(dataFund)) {
-                throw new ValidacaoContrato("Data de início do contrato não pode ser anterior à da fundação da universidade.");
+                throw new DataInvalidaException("Data de início do contrato não pode ser anterior à da fundação da universidade.");
             }
             if(dataContrato.isAfter(hoje)) {
-                throw new ValidacaoContrato("Data de inínicio do contrato não pode estar no futuro.");
+                throw new DataInvalidaException("Data de inínicio do contrato não pode estar no futuro.");
             }
         } catch(DateTimeParseException e) {
-            throw new ValidacaoContrato("Data inválida");
+            throw new DataInvalidaException("Data inválida");
         }
     }
 
@@ -94,7 +96,7 @@ public class Professor extends Dados_Pessoa{
             verificaDataContrato(novocontrato);
             setInicioContrato(novocontrato);
             return true;
-        } catch(ValidacaoContrato e) {
+        } catch(DataInvalidaException e) {
             System.out.println(e.getMessage());
             return false;
         }

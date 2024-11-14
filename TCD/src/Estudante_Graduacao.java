@@ -3,8 +3,8 @@ public class Estudante_Graduacao extends Estudante{
     public String estagio;
 
     //Construtor
-    public Estudante_Graduacao(String nome, String data, String CPF, double CRA, String estagio) {
-        super(nome, data, CPF, CRA);
+    public Estudante_Graduacao(String login, String nome, String data, String CPF, double CRA, String estagio) {
+        super(login, nome, data, CPF, CRA);
         this.estagio = estagio;
     }
     

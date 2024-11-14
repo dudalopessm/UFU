@@ -1,54 +1,182 @@
-public class Turma implements ConvertString{
-            /*
-- Vamos registrar as atividades acadêmicas de uma universidade
-- 1) É necessário fazer o cadastro de estudantes. Para eles são armazenadas as informações de CPF, Nome, Data de Nascimento, CRA
-- 2) É necessário fazer o cadastro de Professores. Para eles são armazenados o CPF, Nome, Data de Nascimento, Início do contrato,
-Departamento Vinculado
-3) Os estudantes podem ser de graduação ou pós-graduação. Os alunos de graduação devem realizar um estágio supervisionado.
-Já os de pós-graduação devem ter um tema de pesquisa
-4) As disciplinas possuem um código, um nome e uma carga horária
-5) Devem ser criadas turmas para as disciplinas, indicando o semestre e ano da turma.
-Faça um programa principal que permita realizar o cadastro e consulta de todas essas informações.
-Para facilitar o teste do sistema, crie algumas funções para popular o sistema (colocar dados) sem a necessidade de digitação,
-embora a possibilidade de cadastrar os dados deva estar disponível.
-     */
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Turma {
     //Atributos
-    public String semestre;
+    public int semestre;
     public int ano;
+    private ArrayList<Estudante> membros = new ArrayList<Estudante>();
+    private Disciplinas disciplina = new Disciplinas();
+    private Professor profTitular;
 
     //Construtor
-    public Turma(String semestre, int ano) {
-        this.semestre = semestre;
-        this.ano = ano;
+    public Turma(int semestre, int ano, Disciplinas disc, Professor titular, ArrayList<Estudante> alunos) {
+        verificaSemestre(semestre);
+        verificaAno(ano);
+        setDisciplina(disc);
+        setProfTitular(titular);
+        matriculaListaDeAlunos(alunos);
+    }
+
+    public Turma(Disciplinas disciplina) {
+        this.disciplina = disciplina;
     }
 
     //Getters e setters
-    
-    public String getSemestre() {
+    public int getSemestre() {
         return semestre;
     }
-    public void setSemestre(String semestre) {
-        if(verificaSemestre(semestre)){
-            this.semestre = semestre;
-        }
-        else{
-            System.out.println("Erro de formato, tente novamente!");
-        }
+
+    private void setSemestre(int semestre) {
+        verificaSemestre(semestre);
     }
+
     public int getAno() {
         return ano;
     }
-    public void setAno(int ano) {
-        this.ano = ano;
+
+    private void setAno(int ano) {
+        verificaAno(ano);
     }
 
+    public ArrayList<Estudante> getMembros() {
+        return membros;
+    }
+
+    private void setMembros(ArrayList<Estudante> membros) {
+        this.membros = membros;
+    }
+
+    public Disciplinas getDisciplina() {
+        return disciplina;
+    }
+
+    private void setDisciplina(Disciplinas disciplina) {
+        this.disciplina = disciplina;
+    }
+
+    public Professor getProfTitular() {
+        return profTitular;
+    }
+
+    private void setProfTitular(Professor profTitular) {
+        this.profTitular = profTitular;
+    }
+
+    //Impressão
     public String toString() {
-        return "\nSemestre: "+ semestre + "\nAno: "+ ano;
+        return "\nDisciplina: " + disciplina.getNome() + "\nSemestre: "+ semestre + "\nAno: "+ ano + "\nProfessor: " + profTitular.getNome();
     }
 
-    //Verificação da formatação do semestre (ano.semestre)
-    public boolean verificaSemestre(String sem) {
-        String modelo = "\\d{4}\\.\\d{1}"; //Formato xxxx.x
-        return sem.matches(modelo);
+    public void alunosDaTurma() {
+        for(int i = 0; i < this.membros.size(); i++) {
+            System.out.println( "----------------------------------------" + "\nNome do aluno: " + this.membros.get(i).getNome() + "\nMatrícula: " + this.membros.get(i).getLogin());
+        }
     }
+
+    //Verificação do semestre
+    public void verificaSemestre(int sem) {
+        Scanner sc = new Scanner(System.in);
+        boolean veri = false;
+        int input = sem;
+        while(!veri) {
+            try {
+                if(input != 1 || input != 2)
+                    throw new SemestreInvalidoException("O semestre deve ser 1 ou 2");
+
+                this.semestre = input;
+                veri = true;
+            } catch(SemestreInvalidoException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Digite um novo semestre (1 ou 2): ");
+                try {
+                    input = sc.nextInt();
+                    sc.nextLine();
+                } catch(InputMismatchException ee) {
+                    System.out.println("Erro: digite apenas números.");
+                    sc.nextLine();
+                    veri = false;
+                }
+            }
+
+        }
+        sc.close();
+    }
+
+    //Verifica se o ano é válido
+    private void verificaAno(int ano) {
+        boolean veri = false;
+        Scanner sc = new Scanner(System.in);
+        int input = ano;
+        while(!veri) {
+            try {
+                int anoAtual = LocalDate.now().getYear();
+
+                if (input > anoAtual + 1) {
+                    throw new DataInvalidaException("O ano não pode ser maior que o próximo ano");
+                }
+
+                this.ano = input;
+                veri = true;
+            } catch(DataInvalidaException e) {
+                System.out.println(e.getMessage());
+                System.out.println("Digite um ano novamente: ");
+                try {
+                    input = sc.nextInt();
+                    sc.nextLine();
+                } catch(InputMismatchException ee) {
+                    System.out.println("Digite apenas números.");
+                    sc.nextLine();
+                }
+            }
+        }
+        sc.close();
+    }
+
+    //Matrículas e desmatrículas de estudantes - só vou usar elas manipulando estudantes
+    protected boolean matriculaUmAluno(Estudante al) {
+        if(this.getMembros().isEmpty()) {
+            this.getMembros().add(al);
+            return true;
+        } else {
+            if(this.getMembros().contains(al)) {
+                return false;
+            } else {
+                this.getMembros().add(al);
+                return true;
+            }
+        }
+    }
+
+    protected boolean matriculaListaDeAlunos(ArrayList<Estudante> lista) {
+        if(this.getMembros().isEmpty()) {
+            this.getMembros().addAll(lista);
+            return true;
+        } else {
+            for(int i = 0; i < lista.size(); i++) {
+                if(!this.getMembros().contains(lista.get(i))) {
+                    this.getMembros().add(lista.get(i));
+                }
+            }
+        }
+        if(this.getMembros().isEmpty())
+            return false;
+        else
+            return true;
+    }
+
+    protected boolean desmatriculaAluno(Estudante al) {
+        if(this.getMembros().contains(al)) {
+            this.getMembros().remove(al);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //Mudanças cadastrais
+    //Cadastro professor
+
 }

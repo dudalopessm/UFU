@@ -10,9 +10,13 @@ public abstract class Dados_Pessoa implements ConvertString {
     public String nome;
     public String dataNasc;
     private String CPF;
+    // TRABALHAR NISSO USANDO INTERFACES
+    private String login;
+    private String senha;
 
     //Construtor
-    public Dados_Pessoa(String nome, String data, String CPF) {
+    public Dados_Pessoa(String login, String nome, String data, String CPF) {
+        setLogin(login);
         this.nome = nome;
         setDataNasc(data);
         setCPF(CPF);
@@ -85,6 +89,22 @@ public abstract class Dados_Pessoa implements ConvertString {
             }
         }
         sc.close();
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    private void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    private void setSenha(String senha) {
+        this.senha = senha;
     }
 
     //Verificações - CPF e data nascimento

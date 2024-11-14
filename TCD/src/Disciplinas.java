@@ -1,10 +1,10 @@
 import java.util.ArrayList;
-public class Disciplinas implements ConvertString{
+public class Disciplinas {
     //Atributos
     private String codigo;
     private String nome;
     private String cargaHoraria;
-    private ArrayList<Turma> turmas = new ArrayList<>();
+    private Turma turma = new Turma(this);
 
     //Construtor
     public Disciplinas(String nome, String codigo, String cargaHoraria) {
@@ -13,40 +13,35 @@ public class Disciplinas implements ConvertString{
         this.cargaHoraria = cargaHoraria;
     }
 
+    public Disciplinas() {
+    }
+
     //Getters e setters
     public String getCodigo() {
         return codigo;
     }
-    public void setCodigo(String codigo) {
+
+    private void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
     public String getNome() {
         return nome;
     }
-    public void setNome(String nome) {
+
+    private void setNome(String nome) {
         this.nome = nome;
     }
+
     public String getCargaHoraria() {
         return cargaHoraria;
     }
-    public void setCargaHoraria(String cargaHoraria) {
+
+    private void setCargaHoraria(String cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public String toString() {
-        String disSTR = "Codigo: "+ this.getCodigo()+"\nNome: "+ this.getNome()+"\nCarga Horaria: "+ this.getCargaHoraria();
-        for(Turma aux: turmas){
-            disSTR += aux.toString();
-        }
-        return disSTR;
-    }
-
     //Mudanças cadastrais
-    public boolean criaTurma(String semestre, int ano){
-        Turma nova = new Turma(semestre, ano);
-        return turmas.add(nova);
-    }
-
     public boolean mudaNome(String novo) {
         if(this.nome.equalsIgnoreCase(novo)) {
             System.out.println("Nome anterior idêntico ao novo. Tente novamente.");
