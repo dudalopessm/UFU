@@ -2,41 +2,41 @@ import java.util.InputMismatchException;
 
 /* Fonte do cálculo do dígito verificador: https://www.campuscode.com.br/conteudos/o-calculo-do-digito-verificador-do-cpf-e-do-cnpj */
 
-public class ValidacaoCPF {
+public abstract class ValidacaoCPF {
     public static boolean CPFvalido(String cpf) {
-        if(cpf.length() != 11) {
-            throw new IllegalArgumentException("CPF deve ter 11 dígitos. Tente novamente.");
-        }
+        if (cpf == null) return false;
 
-        cpf = cpf.replace(".", "").replace("-", "");
+        String cpfNumerico = cpf.replace(".", "").replace("-", "");
+
+        if (cpfNumerico.length() != 11) return false;
+
+        if (cpfNumerico.matches("(\\d)\\1{10}")) return false;
 
         int[] digitos = new int[11];
-
         try {
-            for(int i = 0; i < 11; i++)
-                digitos[i] = Integer.parseInt(cpf.substring(i, i+1));
+            for (int i = 0; i < 11; i++) {
+                digitos[i] = Character.getNumericValue(cpfNumerico.charAt(i));
+            }
         } catch (NumberFormatException e) {
-            throw new InputMismatchException("CPF deve conter apenas dígitos numéricos inteiros. Tente novamente.");
+            return false;
         }
 
         int soma = 0;
-        for(int i = 0; i < 9; i++)
-            soma += (digitos[i]*(10-i));
-        int resto = (soma*10)%11;
-        if((resto == 10) || (resto == 1))
-            resto = 0;
-        if(digitos[9] != resto)
-            throw new IllegalArgumentException("CPF com primeiro dígito verificador inválido. Tente novamente.");
+        for (int i = 0; i < 9; i++) {
+            soma += digitos[i] * (10 - i);
+        }
+        int primeiroDigito = 11 - (soma % 11);
+        if (primeiroDigito > 9) primeiroDigito = 0;
+
+        if (digitos[9] != primeiroDigito) return false;
 
         soma = 0;
-        for(int i = 0; i < 10; i++)
-            soma += (digitos[i]*(11-i));
-        resto = (soma*10)%11;
-        if((resto == 10) || (resto == 1))
-            resto = 0;
-        if(digitos[10] != resto)
-            throw new IllegalArgumentException("CPF com segundo dígito verificador inválido. Tente novamente.");
+        for (int i = 0; i < 10; i++) {
+            soma += digitos[i] * (11 - i);
+        }
+        int segundoDigito = 11 - (soma % 11);
+        if (segundoDigito > 9) segundoDigito = 0;
 
-        return true;
+        return digitos[10] == segundoDigito;
     }
 }

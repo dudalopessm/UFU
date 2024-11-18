@@ -1,10 +1,12 @@
-public class Estudante_PosGraduacao extends Estudante {
+import java.io.Serializable;
+
+public class Estudante_PosGraduacao extends Estudante implements Serializable {
     //Atributos
     public String temaPesquisa;
 
     //Construtor
-    public Estudante_PosGraduacao(String login, String nome, String data, String CPF, double CRA, String temaPesquisa) {
-        super(login, nome, data, CPF,CRA);
+    public Estudante_PosGraduacao(String nome, String data, String CPF, double CRA, String temaPesquisa) {
+        super( nome, data, CPF,CRA);
         this.temaPesquisa = temaPesquisa;
     }
 

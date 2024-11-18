@@ -1,27 +1,21 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 
-public class Turma {
+public class Turma implements Serializable {
     //Atributos
     public int semestre;
     public int ano;
     private ArrayList<Estudante> membros = new ArrayList<Estudante>();
-    private Disciplinas disciplina = new Disciplinas();
     private Professor profTitular;
 
     //Construtor
-    public Turma(int semestre, int ano, Disciplinas disc, Professor titular, ArrayList<Estudante> alunos) {
-        verificaSemestre(semestre);
+    public Turma(int semestre, int ano, Professor titular, ArrayList<Estudante> alunos) {
+        setSemestre(semestre);
         verificaAno(ano);
-        setDisciplina(disc);
         setProfTitular(titular);
         matriculaListaDeAlunos(alunos);
-    }
-
-    public Turma(Disciplinas disciplina) {
-        this.disciplina = disciplina;
     }
 
     //Getters e setters
@@ -30,7 +24,14 @@ public class Turma {
     }
 
     private void setSemestre(int semestre) {
-        verificaSemestre(semestre);
+        try {
+            if(verificaSemestre(semestre)) {
+                this.semestre = semestre;
+            }
+        } catch (SemestreInvalidoException e) {
+            System.out.println("Erro: " + e.getMessage());
+            this.semestre = 0;
+        }
     }
 
     public int getAno() {
@@ -38,7 +39,14 @@ public class Turma {
     }
 
     private void setAno(int ano) {
-        verificaAno(ano);
+        try {
+            if(verificaAno(ano)) {
+                this.ano = ano;
+            }
+        } catch (DataInvalidaException e) {
+            System.out.println("Erro: " + e.getMessage());
+            this.ano = 0;
+        }
     }
 
     public ArrayList<Estudante> getMembros() {
@@ -48,91 +56,79 @@ public class Turma {
     private void setMembros(ArrayList<Estudante> membros) {
         this.membros = membros;
     }
-
-    public Disciplinas getDisciplina() {
-        return disciplina;
-    }
-
-    private void setDisciplina(Disciplinas disciplina) {
-        this.disciplina = disciplina;
-    }
+	
 
     public Professor getProfTitular() {
         return profTitular;
     }
 
     private void setProfTitular(Professor profTitular) {
+        if(this.profTitular != null){
+            this.profTitular.removeMinistada(this);
+        }
+        profTitular.setMinstradas(this);
         this.profTitular = profTitular;
     }
 
     //Impressão
     public String toString() {
-        return "\nDisciplina: " + disciplina.getNome() + "\nSemestre: "+ semestre + "\nAno: "+ ano + "\nProfessor: " + profTitular.getNome();
+        return "\nSemestre: "+ semestre + "\nAno: "+ ano + "\nProfessor: " + profTitular.getNome();
     }
 
     public void alunosDaTurma() {
         for(int i = 0; i < this.membros.size(); i++) {
-            System.out.println( "----------------------------------------" + "\nNome do aluno: " + this.membros.get(i).getNome() + "\nMatrícula: " + this.membros.get(i).getLogin());
+            System.out.println( "----------------------------------------" + "\nNome do aluno: " + this.membros.get(i).getNome());
         }
     }
 
     //Verificação do semestre
-    public void verificaSemestre(int sem) {
-        Scanner sc = new Scanner(System.in);
-        boolean veri = false;
-        int input = sem;
-        while(!veri) {
-            try {
-                if(input != 1 || input != 2)
-                    throw new SemestreInvalidoException("O semestre deve ser 1 ou 2");
+    public boolean verificaSemestre(int sem) throws SemestreInvalidoException {
+        if(sem != 1 && sem != 2)
+            throw new SemestreInvalidoException("O semestre deve ser 1 ou 2.");
+        return true;
+    }
 
-                this.semestre = input;
-                veri = true;
-            } catch(SemestreInvalidoException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite um novo semestre (1 ou 2): ");
-                try {
-                    input = sc.nextInt();
-                    sc.nextLine();
-                } catch(InputMismatchException ee) {
-                    System.out.println("Erro: digite apenas números.");
-                    sc.nextLine();
-                    veri = false;
-                }
-            }
-
+    public boolean isSemestreValido() {
+        try {
+            return verificaSemestre(this.semestre);
+        } catch (SemestreInvalidoException e) {
+            return false;
         }
-        sc.close();
+    }
+
+    public String getSemestreErrorMessage() {
+        try {
+            verificaSemestre(this.semestre);
+            return null;
+        } catch(SemestreInvalidoException e) {
+            return e.getMessage();
+        }
     }
 
     //Verifica se o ano é válido
-    private void verificaAno(int ano) {
-        boolean veri = false;
-        Scanner sc = new Scanner(System.in);
-        int input = ano;
-        while(!veri) {
-            try {
-                int anoAtual = LocalDate.now().getYear();
-
-                if (input > anoAtual + 1) {
-                    throw new DataInvalidaException("O ano não pode ser maior que o próximo ano");
-                }
-
-                this.ano = input;
-                veri = true;
-            } catch(DataInvalidaException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite um ano novamente: ");
-                try {
-                    input = sc.nextInt();
-                    sc.nextLine();
-                } catch(InputMismatchException ee) {
-                    System.out.println("Digite apenas números.");
-                    sc.nextLine();
-                }
-            }
+    private boolean verificaAno(int ano) throws DataInvalidaException {
+        int anoAtual = LocalDate.now().getYear();
+        if (ano > anoAtual + 1) {
+            throw new DataInvalidaException("O ano não pode ser maior que o próximo ano");
         }
-        sc.close();
+        return true;
+    }
+
+    public boolean isAnoValido() {
+        try {
+            return verificaAno(this.ano);
+        } catch (DataInvalidaException e) {
+            return false;
+        }
+    }
+
+    public String getAnoErrorMessage() {
+        try {
+            verificaAno(this.ano);
+            return null;
+        } catch(DataInvalidaException e) {
+            return e.getMessage();
+        }
     }
 
     //Matrículas e desmatrículas de estudantes - só vou usar elas manipulando estudantes
@@ -164,19 +160,19 @@ public class Turma {
         if(this.getMembros().isEmpty())
             return false;
         else
+            for(Estudante aux: membros) {
+                aux.matriculaEstudanteEmUmaDisciplina(this);
+            }
             return true;
     }
 
     protected boolean desmatriculaAluno(Estudante al) {
         if(this.getMembros().contains(al)) {
+            al.desmatriculaEstudanteEmTurma(this);
             this.getMembros().remove(al);
             return true;
         } else {
             return false;
         }
     }
-
-    //Mudanças cadastrais
-    //Cadastro professor
-
 }

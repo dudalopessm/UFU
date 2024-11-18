@@ -1,19 +1,19 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 
-public abstract class Estudante extends Dados_Pessoa{
+public abstract class Estudante extends Dados_Pessoa implements Serializable {
     private double CRA;
     private ArrayList<Turma> turmasMatriculadas = new ArrayList<Turma>();
     
     //Construtor
-    public Estudante(String login, String nome, String data, String CPF, double CRA){
-        super(login, nome, data, CPF);
+    public Estudante( String nome, String data, String CPF, double CRA){
+        super( nome, data, CPF);
         setCRA(CRA);
     }
 
-    public Estudante(String login, String nome, String data, String CPF, double CRA, ArrayList<Turma> turmasMatriculadas) {
-        super(login, nome, data, CPF);
+    public Estudante(String nome, String data, String CPF, double CRA, ArrayList<Turma> turmasMatriculadas) {
+        super(nome, data, CPF);
         setCRA(CRA);
         matriculaEstudanteEmDisciplinas(turmasMatriculadas);
     }
@@ -24,24 +24,30 @@ public abstract class Estudante extends Dados_Pessoa{
     }
 
     private void setCRA(double cra) {
-        Scanner sc = new Scanner(System.in);
-        boolean veri = false;
-        double input = cra;
-        while(!veri) {
-            try {
-                verificaCRA(cra);
+        try {
+            if(verificaCRA(cra)) {
                 this.CRA = cra;
-                veri = true;
-            } catch(CRAInvalidoException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite o CRA novamente, de 0 a 100: ");
-                try {
-                    cra = sc.nextDouble();
-                } catch(InputMismatchException ee) {
-                    System.out.println("Digite um número válido.");
-                    sc.nextLine();
-                }
             }
+        } catch (CRAInvalidoException e) {
+            System.out.println("Erro: " + e.getMessage());
+            this.CRA = 0;
+        }
+    }
+
+    public boolean isCRAValido() {
+        try {
+            return verificaCRA(this.CRA);
+        } catch (CRAInvalidoException e) {
+            return false;
+        }
+    }
+
+    public String getCRAErrorMessage() {
+        try {
+            verificaCRA(this.CRA);
+            return null;
+        } catch (CRAInvalidoException e) {
+            return e.getMessage();
         }
     }
 
@@ -112,7 +118,7 @@ public abstract class Estudante extends Dados_Pessoa{
         }
     }
 
-    public boolean desmatriculaEstudanteEmDisciplina(Turma disc) {
+    public boolean desmatriculaEstudanteEmTurma(Turma disc) {
         if(this.getTurmasMatriculadas().contains(disc)) {
             disc.desmatriculaAluno(this);
             this.getTurmasMatriculadas().remove(disc);

@@ -1,22 +1,17 @@
-import java.time.DateTimeException;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
-import java.util.Scanner;
 
-public abstract class Dados_Pessoa implements ConvertString {
+public abstract class Dados_Pessoa implements ConvertString, Serializable {
     //Atributos
     public String nome;
     public String dataNasc;
     private String CPF;
-    // TRABALHAR NISSO USANDO INTERFACES
-    private String login;
-    private String senha;
 
     //Construtor
-    public Dados_Pessoa(String login, String nome, String data, String CPF) {
-        setLogin(login);
+    public Dados_Pessoa(String nome, String data, String CPF) {
         this.nome = nome;
         setDataNasc(data);
         setCPF(CPF);
@@ -31,33 +26,24 @@ public abstract class Dados_Pessoa implements ConvertString {
         this.nome = nome;
     }
 
+
     public String getDataNasc() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return dataNasc.format(String.valueOf(formatter));
+        return dataNasc;
     }
 
     private void setDataNasc(String data) {
-        Scanner sc = new Scanner(System.in);
-        String input = data;
-        boolean veri = false;
-        while(!veri) {
-            try {
-                if(verificaData(input) && ValidacaoDataNasc.dataValida(input)) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                    this.dataNasc = String.valueOf(LocalDate.parse(input, formatter));
-                } else {
-                    System.out.println("Data inválida. Digite novamente no formato dd/mm/aaaa: ");
-                    input = sc.nextLine();
-                }
-            } catch(InputMismatchException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite novamente no formato dd/mm/aaaa: ");
-                input = sc.nextLine();
-            } catch(DateTimeParseException e) {
-                System.out.println("Formato de data inválido. Digite novamente no formato dd/mm/aaaa: ");
-                input = sc.nextLine();
+        try {
+            if(verificaData(data) && ValidacaoDataNasc.dataValida(data)) {
+                this.dataNasc = data;
             }
+        } catch (DateTimeParseException e) {
+            System.out.println("Erro: " + e.getMessage());
+            this.dataNasc = null;
         }
+    }
+
+    public boolean isDataValida() {
+        return verificaData(this.dataNasc) && ValidacaoDataNasc.dataValida(this.dataNasc);
     }
 
     public String getCPF() {
@@ -65,46 +51,31 @@ public abstract class Dados_Pessoa implements ConvertString {
     }
 
     private void setCPF(String CPF) {
-        Scanner sc = new Scanner(System.in);
-        String input = CPF;
-        boolean veri = false;
-
-        while(!veri) {
-            try {
-                if(verificaCPF(input) && ValidacaoCPF.CPFvalido(input)) {
-                    this.CPF = input;
-                    veri = true;
-                } else {
-                    System.out.println("CPF inválido. Digite novamente (xxx.xxx.xxx-xx):");
-                    input = sc.nextLine();
-                }
-            } catch(IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite novamente (xxx.xxx.xxx-xx):");
-                input = sc.nextLine();
-            } catch(InputMismatchException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite novamente (xxx.xxx.xxx-xx):");
-                input = sc.nextLine();
+        try {
+            if (verificaCPF(CPF) && ValidacaoCPF.CPFvalido(CPF)) {
+                this.CPF = CPF;
             }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
+            this.CPF = null;
         }
-        sc.close();
     }
 
-    public String getLogin() {
-        return login;
+    public boolean isCPFValido() {
+        try {
+            return verificaCPF(this.CPF) && ValidacaoCPF.CPFvalido(this.CPF);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
-    private void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    private void setSenha(String senha) {
-        this.senha = senha;
+    public String getCPFErrorMessage() {
+        try {
+            ValidacaoCPF.CPFvalido(this.CPF);
+            return null;
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
     }
 
     //Verificações - CPF e data nascimento
@@ -112,12 +83,10 @@ public abstract class Dados_Pessoa implements ConvertString {
     * Usarei esse formato para evitar a ocorrência de vários ifs os quais prejudicam a rapidez do programa.
     * Referência utilizada: https://www.w3schools.com/java/java_regex.asp */
     public boolean verificaCPF(String cpf) {
-        String modelo = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"; //Formato xxx.xxx.xxx-xx
-        return cpf.matches(modelo);
+        return cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}");
     }
     public boolean verificaData(String data) {
-        String modelo = "\\d{2}/\\d{2}/\\d{4}"; //Formato xx/xx/xxxx
-        return data.matches(modelo);
+        return data.matches("\\d{2}/\\d{2}/\\d{4}");
     }
 
     //Mudanças cadastrais

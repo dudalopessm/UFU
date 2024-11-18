@@ -1,19 +1,19 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class Professor extends Dados_Pessoa{
+public class Professor extends Dados_Pessoa implements Serializable {
     //Atributos
     private Universidade universidade;
     private String inicioContrato;
     public String departamento;
-    private ArrayList<Disciplinas> ministradas = new ArrayList<Disciplinas>();
+    private ArrayList<Turma> ministradas = new ArrayList<Turma>();
 
     //Construtor
-    public Professor(String login, String nome, String data, String CPF, String departamento, String inicioContrato, Universidade universidade) {
-        super(login, nome, data, CPF);
+    public Professor( String nome, String data, String CPF, String departamento, String inicioContrato, Universidade universidade) {
+        super(nome, data, CPF);
         this.departamento = departamento;
         this.universidade = universidade;
         setInicioContrato(inicioContrato);
@@ -24,23 +24,32 @@ public class Professor extends Dados_Pessoa{
         return inicioContrato;
     }
 
-    public void setInicioContrato(String inicioContrato) {
-        Scanner sc = new Scanner(System.in);
-        String input = inicioContrato;
-        boolean veri = false;
-
-        while(!veri) {
-            try {
-                verificaDataContrato(input);
-                this.inicioContrato = input;
-                veri = true;
-            } catch(DataInvalidaException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Digite nova data de início do contrato no formato dd/mm/aaaa: ");
-                input = sc.nextLine();
+    private void setInicioContrato(String inicioContrato) {
+        try {
+            if(verificaDataContrato(inicioContrato)) {
+                this.inicioContrato = inicioContrato;
             }
+            } catch(DataInvalidaException e) {
+                System.out.println("Erro: " + e.getMessage());
+                this.inicioContrato = null;
         }
-        sc.close();
+    }
+
+    public boolean isInicioContratoValido() {
+        try {
+            return verificaDataContrato(this.inicioContrato);
+        } catch (DataInvalidaException e) {
+            return false;
+        }
+    }
+
+    public String getInicioContratoErrorMessage() {
+        try {
+            verificaDataContrato(this.inicioContrato);
+            return null;
+        } catch (DataInvalidaException e) {
+            return e.getMessage();
+        }
     }
 
     public String getDepartamento() {
@@ -59,13 +68,22 @@ public class Professor extends Dados_Pessoa{
         this.universidade = universidade;
     }
 
+    public void setMinstradas(Turma ministada){
+        if(!ministradas.contains(ministada)){
+            ministradas.add(ministada);
+        }
+    }
+    public void removeMinistada(Turma ministada){
+        ministradas.remove(ministada);
+    }
+
     @Override
     public String toString() {
         return "\n____________________________________" + "\n\tPROFESSOR" + super.toString() + "\nInicio contrato: " + this.inicioContrato + "\nDepartamento: " + this.departamento;
     }
 
     //Verificação data do contrato
-    private void verificaDataContrato(String data) {
+    private boolean verificaDataContrato(String data) {
         if(!verificaData(data)) {
             throw new DataInvalidaException("Data deve estar no formato dd/mm/aaaa");
         }
@@ -84,6 +102,7 @@ public class Professor extends Dados_Pessoa{
         } catch(DateTimeParseException e) {
             throw new DataInvalidaException("Data inválida");
         }
+        return true;
     }
 
     //Mudanças cadastrais

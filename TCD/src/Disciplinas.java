@@ -1,10 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
-public class Disciplinas {
+public class Disciplinas implements Serializable {
     //Atributos
     private String codigo;
     private String nome;
     private String cargaHoraria;
-    private Turma turma = new Turma(this);
+    private ArrayList<Turma> turma = new ArrayList<>();
 
     //Construtor
     public Disciplinas(String nome, String codigo, String cargaHoraria) {
@@ -13,10 +14,27 @@ public class Disciplinas {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public Disciplinas() {
+    //Getters e setters
+    public void setTurma(ArrayList<Turma> turma) {
+        for(Turma tur: turma){
+            Turma aux = new Turma(tur.getSemestre(), tur.getAno(), tur.getProfTitular(),tur.getMembros());
+            this.turma.add(aux);
+            aux = null;
+        }
+    }
+    public void setTurma(Turma turma) {
+        Turma aux = new Turma(turma.getSemestre(), turma.getAno(), turma.getProfTitular(),turma.getMembros());
+            this.turma.add(aux);
     }
 
-    //Getters e setters
+    public void setTurma(int semestre, int ano, Professor titular, ArrayList<Estudante> alunos){
+        Turma aux = new Turma(semestre, ano, titular, alunos);
+        this.turma.add(aux);
+    }
+
+    public ArrayList<Turma> getTurmas(){
+        return this.turma;
+    }
     public String getCodigo() {
         return codigo;
     }

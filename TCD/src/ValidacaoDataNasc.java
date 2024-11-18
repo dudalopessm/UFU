@@ -6,15 +6,18 @@ import java.util.InputMismatchException;
 
 /* Fonte: https://pt.stackoverflow.com/questions/187272/como-verificar-se-a-data-é-válida-ou-inválida */
 
-public class ValidacaoDataNasc {
+public abstract class ValidacaoDataNasc {
     public static boolean dataValida(String data) {
-        String formato = "dd/MM/yyyy";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(formato).withResolverStyle(ResolverStyle.STRICT);
+        String dateFormat = "dd/MM/uuuu";
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+                .ofPattern(dateFormat)
+                .withResolverStyle(ResolverStyle.STRICT);
         try {
             LocalDate date = LocalDate.parse(data, dateTimeFormatter);
             return true;
-        } catch(DateTimeParseException e) {
-            throw new InputMismatchException("Data digitada inválida. Tente novamente.");
+        } catch (DateTimeParseException e) {
+            return false;
         }
     }
 }
