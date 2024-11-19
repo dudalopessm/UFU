@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Estudante_Graduacao extends Estudante implements Serializable {
     //Atributos
@@ -18,6 +19,7 @@ public class Estudante_Graduacao extends Estudante implements Serializable {
         this.estagio = estagio;
     }
 
+    //Impressão
     @Override
     public String toString(){
         return "\n____________________________________" + "\n\tESTUDANTE DE GRADUAÇÃO " + super.toString() + "\nEstágio: " + this.estagio;
