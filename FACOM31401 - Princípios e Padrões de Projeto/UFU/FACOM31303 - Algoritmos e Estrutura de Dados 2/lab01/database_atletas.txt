@@ -1,0 +1,54 @@
+Eduarda Lopes
+ Canadá
+ 2
+ 4000.34
+
+Carlos Méndez
+ México
+ 8
+ 245678.90
+
+Maria Zhang
+ China
+ 4
+ 12900.45
+
+John Krasinsky
+ EUA
+ 10
+ 389567.78
+
+Aisha Koulibaly
+ Senegal
+ 3
+ 56000.12
+
+Lucas Silva
+ Brasil
+ 6
+ 220000.00
+
+Emma Johansson
+ Suécia
+ 12
+ 400000.00
+
+Yuki Tanaka
+ Japão
+ 1
+ 7800.99
+
+Ahmed Fahmy
+ Egito
+ 5
+ 159234.67
+
+Maria Rossi
+ Itália
+ 0
+ 3456.78
+
+Matheus Fiod
+ Arabia
+ 45
+ 34567.800781
