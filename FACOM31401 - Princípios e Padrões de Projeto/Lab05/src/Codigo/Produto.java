@@ -6,13 +6,21 @@ public class Produto {
     private String descricao;
     private double preco;
     private int estoque;
+    private final int max = 1000;
+
+    public Produto(String nome, String descricao, double preco, int estoque) {
+        this.nome = nome;
+        this.descricao = descricao;
+        setPreco(preco);
+        setEstoque(estoque);
+    }
 
     public Produto(int id, String nome, String descricao, double preco, int estoque) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
-        this.preco = preco;
-        this.estoque = estoque;
+        setPreco(preco);
+        setEstoque(estoque);
     }
 
     public int getId() {
@@ -36,7 +44,10 @@ public class Produto {
     }
 
     public void setPreco(double preco) {
-        this.preco = preco;
+        if(preco < 0)
+            throw new IllegalArgumentException("Erro: preço não pode ser negativo.");
+        else
+            this.preco = preco;
     }
 
     public String getDescricao() {
@@ -52,8 +63,18 @@ public class Produto {
     }
 
     public void setEstoque(int estoque) {
-        this.estoque = estoque;
+        if(estoque < 0 || estoque > max)
+            throw new IllegalArgumentException("Erro: quantidade deve ser maior que zero e não deve exceder 1000.");
+        else
+            this.estoque = estoque;
     }
 
-
+    @Override
+    public String toString() {
+        return  "Id do produto: " + getId()
+                + " Nome do produto: " + getNome()
+                + " Descrição do produto: " + getDescricao()
+                + " Preço do produto: " + getPreco()
+                + " Quantidade em estoque: " + getEstoque();
+    }
 }
