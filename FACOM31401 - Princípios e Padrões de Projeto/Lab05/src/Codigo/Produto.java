@@ -23,6 +23,10 @@ public class Produto {
         setEstoque(estoque);
     }
 
+    public Produto() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -71,10 +75,10 @@ public class Produto {
 
     @Override
     public String toString() {
-        return  "Id do produto: " + getId()
-                + " Nome do produto: " + getNome()
-                + " Descrição do produto: " + getDescricao()
-                + " Preço do produto: " + getPreco()
-                + " Quantidade em estoque: " + getEstoque();
+        return "ID: " + getId()
+                + " | Nome: " + getNome()
+                + " | Descrição: " + getDescricao()
+                + " | Preço: " + getPreco()
+                + " | Estoque: " + getEstoque();
     }
 }

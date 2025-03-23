@@ -5,8 +5,7 @@ import BD.ProdutoDAO;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Teste {
-
+public class TesteBD {
     public static void main(String[] args) {
         Connection connection = null;
         try {
