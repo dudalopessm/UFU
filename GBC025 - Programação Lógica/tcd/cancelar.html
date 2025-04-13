@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cancelar Pedido - Pizzas QLoucura</title>
+  <link rel="stylesheet" href="cadastro.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav>
+      <ul class="navbar">
+        <li><a href="site.html">Menu</a></li>
+        <li><a href="cadastro.html">Cadastrar Pedido</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- Conteúdo principal -->
+  <main>
+    <h1>Cancelar Pedido</h1>
+    <form method="post" action="http://localhost:8000/cancelar_pedido">
+      <p><label>Nome do Cliente: <input name="nomeCliente" required></label></p>
+      <p><label>Telefone: <input type=tel name="telCliente" required></label></p>
+      <p><button type="submit">Cancelar Pedido</button></p>
+    </form>    
+  </main>
+  <footer>
+    <address>
+      Desenvolvido por Eduarda Lopes<br>
+      Abril de 2025
+    </address>
+  </footer>
+</body>
+</html>

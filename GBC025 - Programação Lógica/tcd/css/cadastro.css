@@ -1,0 +1,138 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f7f3; 
+    color: #000; 
+    line-height: 1.6;
+}
+
+ul.navbar {
+    list-style: none;
+    padding: 1em;
+    margin: 0;
+    background-color: #a47864; 
+    display: flex;
+    gap: 1em;
+}
+
+ul.navbar li {
+    margin: 0;
+}
+
+ul.navbar a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.5em 1em;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+ul.navbar a:hover {
+    background-color: #8c5e4e; 
+}
+
+h1 {
+    font-size: 2em;
+    margin: 1em;
+    color: #a47864;
+}
+
+form {
+    max-width: 600px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+form p {
+    margin-bottom: 1em;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: 500;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+input[type=radio], input[type=checkbox] {
+    width: auto;
+    margin-right: 0.5em;
+}
+
+fieldset {
+    margin-bottom: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1em;
+}
+
+legend {
+    font-weight: bold;
+    color: #a47864;
+}
+
+button {
+    background-color: #a47864;
+    color: #fff;
+    padding: 0.75em 1.5em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #8c5e4e;
+}
+
+address {
+    text-align: center;
+    margin-top: 3em;
+    font-style: italic;
+    color: #555;
+}
+
+.caixa-confirmacao {
+    background-color: #fff;
+    color: #333;
+    padding: 1.5em 2em;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: 2em auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    font-size: 1rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.caixa-confirmacao h2 {
+    text-align: center;
+    color: #a47864;
+    font-size: 1.5rem;
+    margin-bottom: 1em;
+}
+
+.caixa-erro {
+    border: 2px solid red;
+    background-color: #ffe6e6;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head>
+ <meta charset="UTF-8">
+ <title>Cadastrar Pedido - Pizzas QLoucura</title>
+ <link rel="stylesheet" href="cadastro.css">
+</head>
+<body>
+    <!-- menu -->
+    <ul class="navbar">
+    <li><a href="site.html"> Menu </a>
+    <li><a href="cancelar.html">Cancelar Pedido </a>
+   </ul>
+   <!-- Conteúdo principal -->
+   <form method="post"
+   enctype="application/x-www-form-urlencoded"
+  action="http://localhost:8000/processa_pedido">
+  <p><label>Nome do Cliente: <input name="nomeCliente" required></label></p>
+  <p><label>Telefone: <input type=tel name="telCliente" required></label></p>
+  <p><label>E-mail: <input type=email name="emailCliente" required></label></p>
+  <fieldset>
+   <legend> Tamanho da Pizza </legend>
+   <p><label> <input type=radio name="tamanho" value="p"> Pequena </label></p>
+   <p><label> <input type=radio name="tamanho" value="m"> Media </label></p>
+   <p><label> <input type=radio name="tamanho" value="g"> Grande </label></p>
+  </fieldset>
+  <fieldset>
+   <legend> Ingrediente </legend>
+   <p><label> <input type=checkbox name="ing" value="tom"> Tomate </label></p>
+   <p><label> <input type=checkbox name="ing" value="pre"> Presunto</label></p>
+   <p><label> <input type=checkbox name="ing" value="ceb"> Cebola </label></p>
+   <p><label> <input type=checkbox name="ing" value="que"> Queijo </label></p>
+  </fieldset>
+  <p><label>Horario de entrega desejado: <input type=time min="11:00" max="21:00"
+  step="900" name="tempo" required></label></p>
+  <p><label>Instrucoes para entrega: <textarea name="obs"></textarea></label></p>
+  <p><button type="submit">Enviar Pedido</button></p>
+  </form>
+    <!-- dados relativos a criação e autor! -->
+   <address>Construida em Abril/2025<br>
+    por Eduarda Lopes.</address>
+</body>
+</html>
