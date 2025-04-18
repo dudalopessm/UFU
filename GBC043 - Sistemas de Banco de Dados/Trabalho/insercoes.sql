@@ -102,17 +102,65 @@ INSERT INTO req_amizade (status, recebe_username, envia_username) VALUES
 ('Recusada', 'MoonKnight', 'PhoenixRider'),
 ('Recusada', 'CyberPunk', 'ThunderBolt');
 
-INSERT INTO chat (nome, recebe_username, envia_username) VALUES
-('Chat ShadowHunter & DragonSlayer', 'ShadowHunter', 'DragonSlayer'),
-('Chat PixelWarrior & CyberNinja', 'PixelWarrior', 'CyberNinja'),
-('Chat SteamLord & MechaQueen', 'SteamLord', 'MechaQueen'),
-('Chat CodeSamurai & PhoenixRider', 'CodeSamurai', 'PhoenixRider'),
-('Chat NeonGhost & VortexMage', 'NeonGhost', 'VortexMage'),
-('Chat BladeRunner & Starlight', 'BladeRunner', 'Starlight'),
-('Chat IronPilot & SkyGuardian', 'IronPilot', 'SkyGuardian'),
-('Chat FrostWolf & SolarFlare', 'FrostWolf', 'SolarFlare'),
-('Chat ThunderBolt & MoonKnight', 'ThunderBolt', 'MoonKnight'),
-('Chat DarkKnight & CyberPunk', 'DarkKnight', 'CyberPunk');
+-- Mensagens para o chat ShadowHunter & DragonSlayer
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('ShadowHunter', 'DragonSlayer', 'E aí, Carlos! Tudo bem?'),
+('DragonSlayer', 'ShadowHunter', 'Oi Ana! Tudo ótimo, e com você?'),
+('ShadowHunter', 'DragonSlayer', 'Tudo tranquilo! Vamos jogar hoje?');
+
+-- Mensagens para o chat PixelWarrior & CyberNinja
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('PixelWarrior', 'CyberNinja', 'Julia, você viu o novo jogo que saiu?'),
+('CyberNinja', 'PixelWarrior', 'Vi sim, Pedro! Parece incrível, quero testar'),
+('PixelWarrior', 'CyberNinja', 'Bora jogar juntos amanhã?');
+
+-- Mensagens para o chat SteamLord & MechaQueen
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('SteamLord', 'MechaQueen', 'Fernanda, conseguiu passar daquela fase difícil?'),
+('MechaQueen', 'SteamLord', 'Ainda não, Lucas! Preciso de dicas'),
+('SteamLord', 'MechaQueen', 'Te mando um tutorial que achei');
+
+-- Mensagens para o chat CodeSamurai & PhoenixRider
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('CodeSamurai', 'PhoenixRider', 'Mariana, como está o projeto novo?'),
+('PhoenixRider', 'CodeSamurai', 'Indo bem, Ricardo! Preciso de ajuda com o código'),
+('CodeSamurai', 'PhoenixRider', 'Posso te ajudar depois das 18h');
+
+-- Mensagens para o chat NeonGhost & VortexMage
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('NeonGhost', 'VortexMage', 'Isabela, marcamos de treinar hoje, lembra?'),
+('VortexMage', 'NeonGhost', 'Sim, Gabriel! Às 20h no parque, certo?'),
+('NeonGhost', 'VortexMage', 'Isso mesmo! Levo os equipamentos');
+
+-- Mensagens para o chat BladeRunner & Starlight
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('BladeRunner', 'Starlight', 'Camila, já leu o livro que te indiquei?'),
+('Starlight', 'BladeRunner', 'Ainda não, Rodrigo! Estou terminando outro'),
+('BladeRunner', 'Starlight', 'Depois me diz o que achou quando ler');
+
+-- Mensagens para o chat IronPilot & SkyGuardian
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('IronPilot', 'SkyGuardian', 'Patricia, viagem marcada para sexta!'),
+('SkyGuardian', 'IronPilot', 'Que ótimo, Thiago! Já arrumei as malas'),
+('IronPilot', 'SkyGuardian', 'Passo te buscar às 7h');
+
+-- Mensagens para o chat FrostWolf & SolarFlare
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('FrostWolf', 'SolarFlare', 'Larissa, recebeu os documentos?'),
+('SolarFlare', 'FrostWolf', 'Recebi sim, Bruno! Já enviei a revisão'),
+('FrostWolf', 'SolarFlare', 'Perfeito, obrigado!');
+
+-- Mensagens para o chat ThunderBolt & MoonKnight
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('ThunderBolt', 'MoonKnight', 'Amanda, vamos no show sábado?'),
+('MoonKnight', 'ThunderBolt', 'Claro, Gustavo! Já comprei os ingressos'),
+('ThunderBolt', 'MoonKnight', 'Show! Nos encontramos lá');
+
+-- Mensagens para o chat DarkKnight & CyberPunk
+INSERT INTO facepage.mensagem (chat_recebe_username, chat_envia_username, conteudo) VALUES
+('DarkKnight', 'CyberPunk', 'Clara, como foi na prova hoje?'),
+('CyberPunk', 'DarkKnight', 'Foi bem, Roberto! Acertei quase tudo'),
+('DarkKnight', 'CyberPunk', 'Parabéns! Merece comemorar');
 
 -- Grupos do ShadowHunter (Amigo: DragonSlayer)
 INSERT INTO grupo_amigos (nome, descricao, admin) VALUES
@@ -216,46 +264,46 @@ INSERT INTO facepage.jogo (nome, descricao, dificuldade) VALUES
 ('Zombie Survival', 'Sobreviva a hordas de zumbis pós-apocalípticos', 8),
 ('Candy Kingdom', 'Combine doces em puzzles coloridos', 2);
 
-INSERT INTO facepage.joga (codigo, username, pontuacao) VALUES
+INSERT INTO facepage.joga (nome_jogo, username, pontuacao) VALUES
 -- ShadowHunter (pessoal)
-(1, 'ShadowHunter', 1500),
-(2, 'ShadowHunter', 3000),
+('Space Warriors', 'ShadowHunter', 1500),
+('Epic Quest', 'ShadowHunter', 3000),
 
 -- DragonSlayer (pessoal)
-(3, 'DragonSlayer', 2500),
-(4, 'DragonSlayer', 4200),
+('Speed Racers', 'DragonSlayer', 2500),
+('Dragon Realm', 'DragonSlayer', 4200),
 
 -- TechSolutions (empresarial)
-(5, 'TechSolutions', 9800),
-(6, 'TechSolutions', 1200),
+('Cyber Battle', 'TechSolutions', 9800),
+('Farm Life Simulator', 'TechSolutions', 1200),
 
 -- InovaCorp (empresarial)
-(7, 'InovaCorp', 6700),
-(8, 'InovaCorp', 3300),
+('Puzzle Masters', 'InovaCorp', 6700),
+('Soccer Stars', 'InovaCorp', 3300),
 
 -- MechaQueen (pessoal)
-(9, 'MechaQueen', 5500),
-(10, 'MechaQueen', 7800),
+('Zombie Survival', 'MechaQueen', 5500),
+('Candy Kingdom', 'MechaQueen', 7800),
 
 -- CloudNest (empresarial)
-(1, 'CloudNest', 2100),
-(3, 'CloudNest', 4500),
+('Space Warriors', 'CloudNest', 2100),
+('Speed Racers', 'CloudNest', 4500),
 
 -- NeonGhost (pessoal)
-(2, 'NeonGhost', 8800),
-(4, 'NeonGhost', 6100),
+('Epic Quest', 'NeonGhost', 8800),
+('Dragon Realm', 'NeonGhost', 6100),
 
 -- BrandHub (empresarial)
-(5, 'BrandHub', 3200),
-(7, 'BrandHub', 7600),
+('Cyber Battle', 'BrandHub', 3200),
+('Puzzle Masters', 'BrandHub', 7600),
 
 -- ThunderBolt (pessoal)
-(6, 'ThunderBolt', 2900),
-(8, 'ThunderBolt', 5300),
+('Farm Life Simulator', 'ThunderBolt', 2900),
+('Soccer Stars', 'ThunderBolt', 5300),
 
 -- EduTech (empresarial)
-(9, 'EduTech', 6700),
-(10, 'EduTech', 8900);
+('Zombie Survival', 'EduTech', 6700),
+('Candy Kingdom', 'EduTech', 8900);
 
 
 -- Criando as comunidades

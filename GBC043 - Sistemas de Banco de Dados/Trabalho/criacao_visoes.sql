@@ -1,7 +1,15 @@
 SET search_path TO facepage;
 
--- Criando uma visao para os ranking
-
+-- Visão para rankings de jogos (agregação)
 CREATE OR REPLACE VIEW ranking AS
-SELECT nome, username, pontuacao FROM joga INNER JOIN jogo USING(codigo)
-ORDER BY nome, pontuacao DESC;
+SELECT 
+    j.nome AS jogo,
+    jg.username,
+    jg.pontuacao,
+    RANK() OVER (PARTITION BY j.nome ORDER BY jg.pontuacao DESC) AS posicao_ranking
+FROM 
+    joga jg
+JOIN 
+    jogo j ON jg.nome_jogo = j.nome
+ORDER BY 
+    j.nome, posicao_ranking;

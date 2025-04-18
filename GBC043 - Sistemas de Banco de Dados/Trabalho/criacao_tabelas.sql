@@ -1,17 +1,17 @@
 CREATE SCHEMA facepage;
 SET search_path to facepage;
 
-create table usuario_conta (
-	username varchar(30), 
-	cpf varchar(11) UNIQUE NOT NULL,
-	nome varchar(60) NOT NULL,
-	data_nas date NOT NULL,
-	email varchar(30) NOT NULL,
-	senha varchar(30) NOT NULL,
-	endereco varchar(100),
-	tel_contato varchar(20) NOT NULL,
-	CONSTRAINT usuario_conta_pk PRIMARY KEY(username) 
-);
+	create table usuario_conta (
+		username varchar(30), 
+		cpf varchar(11) UNIQUE NOT NULL,
+		nome varchar(60) NOT NULL,
+		data_nas date NOT NULL,
+		email varchar(30) NOT NULL,
+		senha varchar(30) NOT NULL,
+		endereco varchar(100),
+		tel_contato varchar(20) NOT NULL,
+		CONSTRAINT usuario_conta_pk PRIMARY KEY(username) 
+	);
 
 create table pessoal (
 	nro_amg int NOT NULL DEFAULT 0,
@@ -43,7 +43,7 @@ CREATE TABLE req_amizade (
     CONSTRAINT req_amizade_fk_envia FOREIGN KEY (envia_username) REFERENCES pessoal(username)
 );
 
-create table chat (
+CREATE TABLE chat (
 	nome varchar(50) NOT NULL,
 	recebe_username varchar(30),
 	envia_username varchar(30),
@@ -51,6 +51,25 @@ create table chat (
 	CONSTRAINT chat_fk_recebe FOREIGN KEY (recebe_username) REFERENCES pessoal(username),
 	CONSTRAINT chat_fk_envia FOREIGN KEY (envia_username) REFERENCES pessoal(username)
 );
+
+CREATE TABLE mensagem (
+    id INT GENERATED ALWAYS AS IDENTITY,
+    chat_recebe_username VARCHAR(30) NOT NULL,
+    chat_envia_username VARCHAR(30) NOT NULL,
+    remetente VARCHAR(30) NOT NULL,
+    conteudo TEXT NOT NULL,
+    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    lida BOOLEAN DEFAULT FALSE,
+
+	CONSTRAINT mensagem_pk PRIMARY KEY (chat_recebe_username, chat_envia_username, id),
+    CONSTRAINT mensagem_fk_chat FOREIGN KEY (chat_recebe_username, chat_envia_username)
+        REFERENCES chat(recebe_username, envia_username) ON DELETE CASCADE,
+        
+    CONSTRAINT mensagem_fk_remetente FOREIGN KEY (remetente)
+        REFERENCES pessoal(username)
+);
+
+
 
 create table grupo_amigos (
 	codigo int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -69,18 +88,17 @@ create table participa (
 );
 
 create table jogo (
-	codigo int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-	nome varchar(30) UNIQUE NOT NULL,
+	nome varchar(30) UNIQUE NOT NULL PRIMARY KEY,
 	descricao varchar(100) NOT NULL,
 	dificuldade smallint NOT NULL CHECK (dificuldade BETWEEN 1 AND 10)
 );
 
 create table joga (
-	codigo int,
+	nome_jogo varchar(30),
 	username varchar(30),
 	pontuacao int NOT NULL,
-	CONSTRAINT joga_pk PRIMARY KEY (codigo, username),
-	CONSTRAINT joga_fk_jogo FOREIGN KEY (codigo) REFERENCES jogo(codigo),
+	CONSTRAINT joga_pk PRIMARY KEY (nome_jogo, username),
+	CONSTRAINT joga_fk_jogo FOREIGN KEY (nome_jogo) REFERENCES jogo(nome),
 	CONSTRAINT joga_fk_usuario_conta FOREIGN KEY (username) REFERENCES usuario_conta(username)
 );
 
@@ -113,13 +131,15 @@ create table topico (
 );
 
 create table comentam (
+	id int GENERATED ALWAYS AS IDENTITY,
 	comentario varchar(1000) NOT NULL,
 	membro_postou VARCHAR(30),
 	codigo_topico int,
 	comunidade_topico varchar(30),
 	comunidade_membro varchar(30),
 	membro_comentou varchar(30),
-	CONSTRAINT comentam_pk PRIMARY KEY (membro_postou, membro_comentou, codigo_topico, comunidade_topico, comunidade_membro),
+	data date NOT NULL DEFAULT current_date,
+	CONSTRAINT comentam_pk PRIMARY KEY (membro_postou, membro_comentou, codigo_topico, comunidade_topico, comunidade_membro, id),
 	CONSTRAINT comentam_fk_topico FOREIGN KEY (codigo_topico, comunidade_topico, membro_postou) REFERENCES topico(codigo, comunidade, membro),
 	CONSTRAINT comentam_fk_membros_comunidade FOREIGN KEY (comunidade_membro, membro_comentou) REFERENCES membros_comunidade(comunidade, membro)
 );

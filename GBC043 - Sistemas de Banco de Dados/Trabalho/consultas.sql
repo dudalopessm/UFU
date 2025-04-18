@@ -18,11 +18,30 @@ GROUP BY u.username
 ORDER BY total_paginas DESC
 LIMIT 1;
 
--- Maior pontuação do ranking, o jogo correspondente e o usuário que realizou
+-- Maior pontuação do ranking, o jogo correspondente e o usuário que realizou (Separado por jogo)
+
+SELECT jogo, username, pontuacao AS maior_pontuacao
+FROM ranking
+WHERE posicao_ranking = 1
+ORDER BY jogo;
+
+-- Mostrar a pontuação do ranking, o jogo correspondente e o usuário que realizou (Separado por jogo)
+
+SELECT jogo, username, pontuacao AS menor_pontuacao
+FROM ranking R
+WHERE posicao_ranking = (SELECT MAX(posicao_ranking) 
+        FROM ranking R2 
+        WHERE R2.jogo = R.jogo)
+ORDER BY jogo;
 
 
 -- Mensagens do chat com número de mensagens entre 2 e 10
 
+SELECT chat_envia_username, chat_recebe_username
+FROM mensagem
+GROUP BY chat_envia_username, chat_recebe_username
+HAVING COUNT(*) BETWEEN 2 AND 10
+ORDER BY chat_envia_username, chat_recebe_username;
 
 -- Descrição e título da comunidade com mais membros
 CREATE VIEW contagem_membros_comunidades AS
@@ -45,11 +64,13 @@ SELECT t.comunidade, t.membro AS autor, t.titulo, t.descricao, t.data
 	WHERE t.data BETWEEN '2023-09-01' AND '2023-12-01';
 
 -- Quantas requisições de amizade tem cada status
+
 SELECT r.status, COUNT(*) AS quantidade
 FROM req_amizade r
 GROUP BY r.status;
 
 -- Quais grupos de amigos podem ver quais páginas
+
 SELECT g.nome AS nome_grupo, p.nome AS nome_pagina, p.criador AS criador_pagina
 	FROM grupo_amigos g INNER JOIN pode_ver pv ON g.codigo = pv.codigo_grupo 
 	INNER JOIN pagina p ON pv.nome = p.nome AND pv.criador = p.criador
