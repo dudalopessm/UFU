@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+body {
+    font-family: 'Raleway', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(to right, #cf7348, #5c2600);
+}
+
+h1 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #5a5a5a;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    font-family: 'Raleway', sans-serif;
+}
+
+input[type="text"]:focus {
+    border-color: #8B4513;
+    outline: none;
+}
+
+button, .btn-voltar {
+    background-color:#8B4513;
+    color: #ffffff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    font-family: 'Raleway', sans-serif;
+}
+
+button:hover, .btn-voltar:hover {
+    background-color: #8B4513;
+    transform: scale(1.05);
+}
+
+.tabs-area {
+    overflow: hidden;
+    border-bottom: 2px solid #ccc;
+    background-color: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+    padding: 10px;
+}
+
+.tabs-area input[type="radio"] {
+    display: none;
+}
+
+.tabs-area label {
+    background-color: transparent;
+    padding: 14px 20px;
+    cursor: pointer;
+    float: left;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+    color: #5a5a5a;
+    font-family: 'Raleway', sans-serif;
+}
+
+.tabs-area label:hover {
+    background-color: #d3d3d3;
+}
+
+.tabcontent {
+    display: none;
+    clear: both;
+    padding: 25px;
+    border: 2px solid #ccc;
+    border-top: none;
+    background-color: #ffffff;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Quando a aba é selecionada (agora marrom) */
+#tab-consultar:checked + label,
+#tab-cadastrar:checked + label,
+#tab-atualizar:checked + label,
+#tab-remover:checked + label {
+    background-color: #8B4513;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Conteúdo da aba ativa */
+#tab-consultar:checked ~ #consultar,
+#tab-cadastrar:checked ~ #cadastrar,
+#tab-atualizar:checked ~ #atualizar,
+#tab-remover:checked ~ #remover {
+    display: block;
+}
+
+#resposta {
+    text-align: center;
+    padding: 20px;
+}
+
+#resposta .btn-voltar {
+    margin-top: 25px;
+}

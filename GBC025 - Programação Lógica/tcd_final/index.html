@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Telefones</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gerenciador de Telefones</h1>
+
+    <div class="container">
+        <div class="tabs-area">
+
+            <input type="radio" id="tab-consultar" name="tabs" checked>
+            <label for="tab-consultar">Consultar</label>
+
+            <input type="radio" id="tab-cadastrar" name="tabs">
+            <label for="tab-cadastrar">Cadastrar</label>
+
+            <input type="radio" id="tab-atualizar" name="tabs">
+            <label for="tab-atualizar">Atualizar</label>
+
+            <input type="radio" id="tab-remover" name="tabs">
+            <label for="tab-remover">Remover</label>
+
+            <form id="consultar" class="tabcontent" action="/opcao_01" method="POST">
+                <h2>Consultar Telefone</h2>
+                <div class="form-group">
+                    <label for="consulta-nome">Nome:</label>
+                    <input type="text" id="consulta-nome" name="nome" placeholder="Digite o nome" required>
+                </div>
+                <button type="submit">Consultar</button>
+                <div id="consulta-result"></div>
+            </form>
+
+            <form id="cadastrar" class="tabcontent" action="/opcao_02" method="POST">
+                <h2>Cadastrar Novo</h2>
+                <div class="form-group">
+                    <label for="cadastro-nome">Nome:</label>
+                    <input type="text" id="cadastro-nome" name="nome" placeholder="Digite o nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="cadastro-telefone">Telefone (8 dígitos):</label>
+                    <input type="text" id="cadastro-telefone" name="telefone" placeholder="Digite o telefone" required pattern="[0-9]{8}" title="Digite exatamente 8 dígitos">
+                </div>
+                <button type="submit">Cadastrar</button>
+                <div id="cadastro-result"></div>
+            </form>
+
+            <form id="atualizar" class="tabcontent" action="/opcao_03" method="POST">
+                <h2>Atualizar Telefone</h2>
+                <div class="form-group">
+                    <label for="atualiza-nome">Nome:</label>
+                    <input type="text" id="atualiza-nome" name="nome" placeholder="Digite o nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="atualiza-telefone">Novo Telefone (8 dígitos):</label>
+                    <input type="text" id="atualiza-telefone" name="telefone" placeholder="Digite o novo telefone" required pattern="[0-9]{8}" title="Digite exatamente 8 dígitos">
+                </div>
+                <button type="submit">Atualizar</button>
+                <div id="atualiza-result"></div>
+            </form>
+
+            <form id="remover" class="tabcontent" action="/opcao_04" method="POST">
+                <h2>Remover Assinante</h2>
+                <div class="form-group">
+                    <label for="remove-nome">Nome:</label>
+                    <input type="text" id="remove-nome" name="nome" placeholder="Digite o nome" required>
+                </div>
+                <button type="submit">Remover</button>
+                <div id="remove-result"></div>
+            </form>
+
+        </div>
+    </div>
+</body>
+</html>
