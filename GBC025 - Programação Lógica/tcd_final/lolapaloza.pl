@@ -9,20 +9,16 @@ ler_opcao :-
     skip_line,
     char_code(Char, Code),
     (   
-        Code =:= 53 -> 
-        writeln('Saindo do sistema...'), 
-        !,
-        halt
-    ;   
-        between(49, 52, Code) ->  % Códigos ASCII de '1' a '4' (5 foi lido em cima)
+        between(49, 54, Code) ->  % Códigos ASCII de '1' a '6'
         Opcao is Code - 48,
         executar_opcao(Opcao),
         fail
     ;   
-        writeln('Opcao invalida! Digite apenas numeros de 1 a 5.'),
+        writeln('Opcao invalida! Digite apenas numeros de 1 a 6.'),
         continuar,
         fail
     ).
+
 
 ler_string(Atom) :-
     ler_string_lista(ListaChars),
@@ -68,12 +64,24 @@ executar_opcao(1) :-
     flush_output,
     ler_string(Nome),
     (
-        telefone_de(Nome, Telefone) -> format('Telefone de ~w: ~w~n', [Nome, Telefone])
+        telefone_de(Nome, Telefone) ->
+            format('Telefone de ~w: ~w~n', [Nome, Telefone])
         ;
-        format('Telefone de ~w nao existe na base de dados.~n', [Nome])
+        (
+            format('Telefone de ~w nao existe na base de dados.~n', [Nome]),
+            write('Digite o telefone para registrar: '),
+            flush_output,
+            ler_string(NovoTelefone),
+            (
+                telefone_de(OutroNome, NovoTelefone) ->
+                    format('Erro: Este telefone ja está registrado para ~w.~n', [OutroNome])
+                ;
+                    assertz(telefone_de(Nome, NovoTelefone)),
+                    format('Telefone de ~w registrado com sucesso!~n', [Nome])
+            )
+        )
     ),
-    continuar.
-
+    continuar.
 executar_opcao(2) :-
     writeln('== Novo assinante =='),
     write('Nome: '), flush_output, ler_string(Nome),
@@ -132,13 +140,34 @@ executar_opcao(4) :-
     write('Nome do assinante: '), flush_output, ler_string(Nome),
 
     (   
-        retractall(telefone_de(Nome, _)) ->
+        telefone_de(Nome, _) ->
+        retractall(telefone_de(Nome, _)),
         salvar_telefones,
         format('Assinante ~w removido com sucesso!~n', [Nome])
     ;   
         format('Assinante ~w nao encontrado!~n', [Nome])
     ),
     continuar.
+
+executar_opcao(5) :-
+    writeln('== Lista de todos os assinantes =='),
+    findall((Nome, Telefone), telefone_de(Nome, Telefone), Lista),
+    (
+        Lista \= [] ->
+            imprimir_assinantes(Lista)
+        ;
+            writeln('Nenhum assinante cadastrado.')
+    ),
+    continuar.
+
+imprimir_assinantes([]).
+imprimir_assinantes([(Nome, Telefone)|Resto]) :-
+    format('Nome: ~w, Telefone: ~w~n', [Nome, Telefone]),
+    imprimir_assinantes(Resto).
+
+executar_opcao(6) :-
+    writeln('Saindo do sistema...'),
+    halt.
 
 menu :-
     repeat,
@@ -150,7 +179,8 @@ menu :-
     format('2 - Novo assinante~n'),
     format('3 - Modificar telefone~n'),
     format('4 - Remover assinante~n'),
-    format('5 - Fim~n'),
+    format('5 - Listar todos os assinantes~n'),
+    format('6 - Fim~n'),
     flush_output,
     
     ler_opcao.

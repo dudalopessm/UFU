@@ -14,6 +14,7 @@
 :- http_handler('/opcao_02', executar_opcao_02, [method(post)]).
 :- http_handler('/opcao_03', executar_opcao_03, [method(post)]).
 :- http_handler('/opcao_04', executar_opcao_04, [method(post)]).
+:- http_handler('/opcao_05', executar_opcao_05, [method(get)]).
 :- http_handler(root('style.css'), http_reply_file('style.css', []), []).
 
 % Inicia o servidor
@@ -43,14 +44,14 @@ salvar_telefones :-
     told.
 
 verificar_telefone(Telefone, Telefone_integer) :-
-    % Verifico se é atom(de acordo com a implementacao de ler_string é)
+    % Verifico se é atom
     atom(Telefone),
     atom_chars(Telefone, Chars),
 
-    % Para cada um dos caracteres em Chars execute is_digit
+    % Verifica se é um digito
     maplist(is_digit, Chars),
 
-    % Condicao de ter EXATOS 8 numeros
+    % verifica se tem 8 numeros
     length(Chars, 8),
     atom_number(Telefone, Telefone_integer),
     between(10000000, 99999999, Telefone_integer).
@@ -66,20 +67,26 @@ formatar_mensagem(Mensagem, Args, MensagemFormatada) :-
 executar_opcao_01(Request) :- 
     !,
     http_parameters(Request,
-        [ nome(NomeAtom, [atom])
-        ]),
+        [ nome(NomeAtom, [atom]),
+          telefone(Telefone, [atom])  % agora o telefone vem no request
+        ]
+    ),
     downcase_atom(NomeAtom, Nome),
-    (   
-        
-        telefone_de(Nome, Telefone) 
-        -> 
-            formatar_mensagem('Telefone de ~w: ~w', [Nome, Telefone], MensagemFormatada),
+    (
+        telefone_de(Nome, TelefoneExistente) ->
+            formatar_mensagem('Telefone de ~w: ~w', [Nome, TelefoneExistente], MensagemFormatada),
             resposta_html('Consulta realizada', MensagemFormatada)
         ;
-        formatar_mensagem('Telefone de ~w nao existe na base de dados.', [Nome], MensagemFormatada),
-        resposta_html('Erro', MensagemFormatada)
+        (
+            telefone_de(OutroNome, Telefone) ->
+                formatar_mensagem('Erro: Este telefone ja está registrado para ~w.', [OutroNome], MensagemFormatada),
+                resposta_html('Erro', MensagemFormatada)
+            ;
+                assertz(telefone_de(Nome, Telefone)),
+                formatar_mensagem('Telefone de ~w registrado com sucesso!', [Nome], MensagemFormatada),
+                resposta_html('Registro efetuado', MensagemFormatada)
+    )
     ).
-
 % Cadastrar um novo assinante valido no sistema
 executar_opcao_02(Request) :-
     http_parameters(Request,
@@ -143,7 +150,8 @@ executar_opcao_04(Request) :-
         ]),
         downcase_atom(NomeAtom, Nome),
     (   
-        retractall(telefone_de(Nome, _)) ->
+        telefone_de(Nome, _) ->
+        retractall(telefone_de(Nome, _)),
         salvar_telefones,
         formatar_mensagem('Assinante ~w removido com sucesso!', [Nome], MensagemFormatada),
         resposta_html('Atualizacao', MensagemFormatada)
@@ -151,6 +159,19 @@ executar_opcao_04(Request) :-
         formatar_mensagem('Assinante ~w nao encontrado!', [Nome], MensagemFormatada),
         resposta_html('Erro', MensagemFormatada)
     ).
+
+% Listar todos os assinantes
+executar_opcao_05(_Request) :-
+    findall((Nome, Telefone), telefone_de(Nome, Telefone), Lista),
+    (
+        Lista == [] ->
+        resposta_html('Lista de Assinantes', 'Nenhum assinante cadastrado no sistema.')
+    ;
+        maplist(formatar_assinante, Lista, Elementos),
+        resposta_html('Lista de Assinantes', [p(Elementos)])
+    ).
+
+formatar_assinante((Nome, Telefone), p(['Nome: ', Nome, ', Telefone: ', Telefone])).
 
 % Inicia o servidor
 :- initialization(server(8000)).

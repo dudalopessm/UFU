@@ -24,6 +24,9 @@
             <input type="radio" id="tab-remover" name="tabs">
             <label for="tab-remover">Remover</label>
 
+            <input type="radio" id="tab-listar" name="tabs">
+            <label for="tab-listar">Listar Todos</label>
+
             <form id="consultar" class="tabcontent" action="/opcao_01" method="POST">
                 <h2>Consultar Telefone</h2>
                 <div class="form-group">
@@ -72,6 +75,11 @@
                 <div id="remove-result"></div>
             </form>
 
+            <form id="listar" class="tabcontent" action="/opcao_05" method="GET">
+            <h2>Lista de Todos os Assinantes</h2>
+            <p>Clique abaixo para visualizar a lista completa:</p>
+            <button type="submit">Exibir Lista</button>
+            </form>
         </div>
     </div>
 </body>
