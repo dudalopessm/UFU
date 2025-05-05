@@ -132,13 +132,13 @@ public class TAdapter extends KeyAdapter {
 
 A arquitetura do jogo utiliza diversos padrões de projeto para garantir uma base de código flexível e de fácil manutenção. Os padrões mais evidentes são:
 
-Template Method: definir a estrutura do algoritmo do loop do jogo.
++ Template Method: definir a estrutura do algoritmo do loop do jogo.
 
-Factory Method: criação de componentes específicos do jogo.
++ Factory Method: criação de componentes específicos do jogo.
 
-Composite: gerenciamento de hierarquias de objetos do tipo sprite.
++ Composite: gerenciamento de hierarquias de objetos do tipo sprite.
 
-Elementos dos padrões Observer, Command e Strategy: comportamentos relacionados à comunicação entre componentes e controle de entrada.
++ Elementos dos padrões Observer e Command: comportamentos relacionados à comunicação entre componentes e controle de entrada.
 
 Essa abordagem baseada em frameworks permite a criação de diferentes jogos com uma arquitetura compartilhada, mas com comportamentos personalizados, como demonstrado pela implementação do Freeze Monster.
 
