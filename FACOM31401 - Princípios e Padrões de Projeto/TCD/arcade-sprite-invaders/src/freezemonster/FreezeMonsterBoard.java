@@ -59,7 +59,7 @@ public class FreezeMonsterBoard extends AbstractBoard {
         d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
         setBackground(Color.cyan);  // visual diferente
 
-        timer = new Timer(20, new GameCycle()); // pode ser mais lento, se quiser
+        timer = new Timer(10, new GameCycle()); // pode ser mais lento, se quiser
 
         timer.start();
 
@@ -116,13 +116,6 @@ public class FreezeMonsterBoard extends AbstractBoard {
     @Override
     protected void update() {
 
-        // verifica se venceu
-        if (deaths == Commons.NUMBER_OF_MONSTERS_TO_DESTROY) {
-            inGame = false;
-            timer.stop();
-            message = "Game won!";
-        }
-
         // player
         for (Player player : players)
             player.act();
@@ -133,6 +126,7 @@ public class FreezeMonsterBoard extends AbstractBoard {
             int geloX = gelo.getX();
             int geloY = gelo.getY();
 
+            // verificar colisão com monstros
             for (BadSprite alien : badSprites) {
 
                 int alienX = alien.getX();
@@ -152,9 +146,28 @@ public class FreezeMonsterBoard extends AbstractBoard {
                         alien.setDy(0);
                         alien.setDx(0);
 
-
-                        deaths++;
                         gelo.die(); // mata o tiro
+                    }
+                }
+
+                // verificar colisão com gosmas
+                if (alien instanceof Monstro monstro && gelo.isVisible()) {
+                    Gosma gosma = monstro.getGosma();
+
+                    if (!gosma.isDestroyed()) {
+                        int gosmaX = gosma.getX();
+                        int gosmaY = gosma.getY();
+
+                        // verificar colisão do gelo com a gosma
+                        // mesma lógica de colisão que é usada para outros objetos
+                        if (geloX >= gosmaX &&
+                                geloX <= (gosmaX + Commons.GOSMA_WIDTH) &&
+                                geloY >= gosmaY &&
+                                geloY <= (gosmaY + Commons.GOSMA_HEIGHT)) {
+
+                            gosma.setDestroyed(true); // destrói a gosma
+                            gelo.die(); // destrói o gelo também
+                        }
                     }
                 }
             }
@@ -195,6 +208,29 @@ public class FreezeMonsterBoard extends AbstractBoard {
                     monstro.act(); // diferente do space invaders, controlamos as bordas dentro do act e não dentro do tabuleiro
                 }
             }
+        }
+
+        // verifica se todos os monstros estão congelados
+        boolean todosCongelados = true;
+        int monstrosCongelados = 0;
+
+        for (BadSprite alien : badSprites) {
+            if (alien instanceof Monstro monstro) {
+                if (alien.isVisible() && !monstro.isCongelado()) {
+                    todosCongelados = false;
+                    break;
+                }
+                if (monstro.isCongelado()) {
+                    monstrosCongelados++;
+                }
+            }
+        }
+
+        // verifica se venceu
+        if (todosCongelados && monstrosCongelados > 0) {
+            inGame = false;
+            timer.stop();
+            message = "Game won!";
         }
 
         // bombs e outros sprites

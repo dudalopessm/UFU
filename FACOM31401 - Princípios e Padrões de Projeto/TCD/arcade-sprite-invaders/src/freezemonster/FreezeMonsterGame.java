@@ -17,7 +17,6 @@ public class FreezeMonsterGame extends MainFrame {
         return new FreezeMonsterBoard();
     }
 
-
     public static void main(String[] args) {
 
         EventQueue.invokeLater(FreezeMonsterGame::new);

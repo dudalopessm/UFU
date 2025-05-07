@@ -17,6 +17,8 @@ public interface Commons extends spriteframework.Commons{
     int GROUND = 780; // mesmo da altura da tela;
     int PLAYER_WIDTH = 60; // hitbox do woody
     int PLAYER_HEIGHT = 60;
+    int GOSMA_WIDTH = 20;
+    int GOSMA_HEIGHT = 20;
 
     int INIT_PLAYER_X = 500;
     int INIT_PLAYER_Y = 500;
