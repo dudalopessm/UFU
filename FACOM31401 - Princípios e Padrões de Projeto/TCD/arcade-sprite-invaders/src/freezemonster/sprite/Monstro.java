@@ -142,7 +142,7 @@ public class Monstro extends BadnessBoxSprite {
     public LinkedList<BadSprite> getBadnesses() {
         if(this.isCongelado() == true){
             return new LinkedList<>();
-        }else {
+        } else {
             LinkedList<BadSprite> aGosma = new LinkedList<>();
             aGosma.add(gosma);
             return aGosma;

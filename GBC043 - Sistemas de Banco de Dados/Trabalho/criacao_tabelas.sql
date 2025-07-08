@@ -1,7 +1,7 @@
 CREATE SCHEMA facepage;
 SET search_path to facepage;
 
-	create table usuario_conta (
+create table usuario_conta (
 		username varchar(30), 
 		cpf varchar(11) UNIQUE NOT NULL,
 		nome varchar(60) NOT NULL,

@@ -59,7 +59,7 @@ public class FreezeMonsterBoard extends AbstractBoard {
         d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
         setBackground(Color.cyan);  // visual diferente
 
-        timer = new Timer(10, new GameCycle()); // pode ser mais lento, se quiser
+        timer = new Timer(15, new GameCycle()); // pode ser mais lento, se quiser
 
         timer.start();
 

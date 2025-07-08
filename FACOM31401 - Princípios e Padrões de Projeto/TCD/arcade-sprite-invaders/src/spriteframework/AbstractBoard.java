@@ -60,7 +60,6 @@ public abstract class AbstractBoard extends JPanel {
     protected abstract Color getBackgroundColor();
 
     public AbstractBoard() {
-
         initBoard();
         createPlayers();
 		        numberPlayers = 1;
@@ -160,9 +159,7 @@ public abstract class AbstractBoard extends JPanel {
         Toolkit.getDefaultToolkit().sync();
     }
 
-
     private void doGameCycle() {
-
         update();
         repaint();
     }
